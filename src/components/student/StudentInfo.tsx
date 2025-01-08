@@ -1,8 +1,7 @@
-import React from 'react';
-import { Phone, GraduationCap, Calendar, Clock, FileText } from 'lucide-react';
-import Card from '../ui/Card';
-import { formatDate } from '../../utils/date';
-import type { StudentDetails } from '../../types/student';
+import { Phone, GraduationCap, Calendar, Clock, FileText } from "lucide-react";
+import Card from "../ui/Card";
+import { formatDate } from "../../utils/date";
+import type { StudentDetails } from "../../types/student";
 
 interface StudentInfoProps {
   student: StudentDetails;
@@ -10,10 +9,18 @@ interface StudentInfoProps {
 
 export default function StudentInfo({ student }: StudentInfoProps) {
   const infoItems = [
-    { icon: GraduationCap, label: 'المستوى التعليمي', value: student.education_level },
-    { icon: Phone, label: 'رقم الهاتف', value: student.mobile_number },
-    { icon: Calendar, label: 'تاريخ الميلاد', value: formatDate(student.date_of_birth) },
-    { icon: Clock, label: 'العمر', value: `${student.age} سنة` },
+    {
+      icon: GraduationCap,
+      label: "المستوى التعليمي",
+      value: student.education_level,
+    },
+    { icon: Phone, label: "رقم الهاتف", value: student.mobile_number },
+    {
+      icon: Calendar,
+      label: "تاريخ الميلاد",
+      value: formatDate(student.date_of_birth),
+    },
+    { icon: Clock, label: "العمر", value: `${student.age} سنة` },
   ];
 
   return (

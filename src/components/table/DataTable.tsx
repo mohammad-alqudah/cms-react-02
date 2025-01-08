@@ -1,6 +1,5 @@
-import React from 'react';
-import { ArrowUpDown, ChevronUp, ChevronDown, AlertCircle } from 'lucide-react';
-import Tooltip from '../ui/Tooltip';
+import { ArrowUpDown, ChevronUp, ChevronDown, AlertCircle } from "lucide-react";
+import Tooltip from "../ui/Tooltip";
 
 interface Column {
   label: string;
@@ -9,7 +8,7 @@ interface Column {
 
 interface Sort {
   field: string;
-  direction: 'asc' | 'desc' | null;
+  direction: "asc" | "desc" | null;
 }
 
 interface DataTableProps {
@@ -20,12 +19,12 @@ interface DataTableProps {
   onSort?: (field: string) => void;
 }
 
-export default function DataTable({ 
-  columns, 
-  data, 
+export default function DataTable({
+  columns,
+  data,
   onRowClick,
-  sort = { field: '', direction: null },
-  onSort
+  sort = { field: "", direction: null },
+  onSort,
 }: DataTableProps) {
   const renderMobileView = () => (
     <div className="space-y-4 md:hidden">
@@ -34,7 +33,7 @@ export default function DataTable({
           key={row.id}
           onClick={() => onRowClick?.(row.id)}
           className={`bg-white p-4 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors ${
-            row.alert ? 'bg-red-50 border-red-200' : ''
+            row.alert ? "bg-red-50 border-red-200" : ""
           }`}
         >
           {row.alert && (
@@ -47,7 +46,8 @@ export default function DataTable({
             <div key={field} className="flex justify-between items-center py-1">
               <span className="text-sm font-medium text-gray-500">{label}</span>
               <span className="text-sm text-gray-900">
-                {typeof row[field] === 'number' && field.toLowerCase().includes('rate')
+                {typeof row[field] === "number" &&
+                field.toLowerCase().includes("rate")
                   ? `${row[field]}%`
                   : row[field]}
               </span>
@@ -74,9 +74,9 @@ export default function DataTable({
                   {label}
                   <div className="flex items-center">
                     {sort.field === field ? (
-                      sort.direction === 'asc' ? (
+                      sort.direction === "asc" ? (
                         <ChevronUp className="h-4 w-4 text-[#67B37D]" />
-                      ) : sort.direction === 'desc' ? (
+                      ) : sort.direction === "desc" ? (
                         <ChevronDown className="h-4 w-4 text-[#67B37D]" />
                       ) : (
                         <ArrowUpDown className="h-4 w-4 text-gray-400 group-hover:text-gray-600" />
@@ -96,18 +96,22 @@ export default function DataTable({
               key={row.id}
               onClick={() => onRowClick?.(row.id)}
               className={`hover:bg-gray-50 cursor-pointer transition-colors ${
-                row.alert ? 'bg-red-50' : ''
+                row.alert ? "bg-red-50" : ""
               }`}
             >
               {columns.map(({ field }, index) => (
-                <td key={field} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td
+                  key={field}
+                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                >
                   <div className="flex items-center gap-2">
                     {index === 0 && row.alert && (
                       <Tooltip content={row.alert}>
                         <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
                       </Tooltip>
                     )}
-                    {typeof row[field] === 'number' && field.toLowerCase().includes('rate')
+                    {typeof row[field] === "number" &&
+                    field.toLowerCase().includes("rate")
                       ? `${row[field]}%`
                       : row[field]}
                   </div>

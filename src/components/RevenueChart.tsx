@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import type { MonthlyRevenue } from '../types';
-import Card from './ui/Card';
+import { useEffect, useRef, useState } from "react";
+import type { MonthlyRevenue } from "../types";
+import Card from "./ui/Card";
 
 export default function RevenueChart({ data }: { data: MonthlyRevenue[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -12,63 +12,77 @@ export default function RevenueChart({ data }: { data: MonthlyRevenue[] }) {
         const width = containerRef.current.clientWidth;
         setDimensions({
           width: Math.max(width - 40, 300), // Minimum width of 300px
-          height: Math.min(width * 0.5, 300) // Responsive height with max of 300px
+          height: Math.min(width * 0.5, 300), // Responsive height with max of 300px
         });
       }
     };
 
     updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  const maxValue = Math.max(...data.flatMap(d => [d.collected, d.expected]));
+  const maxValue = Math.max(...data.flatMap((d) => [d.collected, d.expected]));
   const padding = { top: 20, right: 20, bottom: 80, left: 60 }; // Increased bottom padding for vertical labels
   const chartWidth = dimensions.width - padding.left - padding.right;
   const chartHeight = dimensions.height - padding.top - padding.bottom;
 
   // Calculate points for the lines
   const pointsCollected = data.map((d, i) => ({
-    x: (i * (chartWidth / (data.length - 1))) + padding.left,
-    y: dimensions.height - ((d.collected / maxValue) * chartHeight) - padding.bottom
+    x: i * (chartWidth / (data.length - 1)) + padding.left,
+    y:
+      dimensions.height -
+      (d.collected / maxValue) * chartHeight -
+      padding.bottom,
   }));
 
   const pointsExpected = data.map((d, i) => ({
-    x: (i * (chartWidth / (data.length - 1))) + padding.left,
-    y: dimensions.height - ((d.expected / maxValue) * chartHeight) - padding.bottom
+    x: i * (chartWidth / (data.length - 1)) + padding.left,
+    y:
+      dimensions.height -
+      (d.expected / maxValue) * chartHeight -
+      padding.bottom,
   }));
 
   // Create SVG paths
   const createPath = (points: { x: number; y: number }[]) => {
-    return points.map((point, i) => 
-      i === 0 ? `M ${point.x},${point.y}` : `L ${point.x},${point.y}`
-    ).join(' ');
+    return points
+      .map((point, i) =>
+        i === 0 ? `M ${point.x},${point.y}` : `L ${point.x},${point.y}`
+      )
+      .join(" ");
   };
 
   return (
     <Card>
-      <h3 className="text-lg font-medium text-gray-900 mb-6 text-right">إحصائيات التحصيل الشهري</h3>
+      <h3 className="text-lg font-medium text-gray-900 mb-6 text-right">
+        إحصائيات التحصيل الشهري
+      </h3>
       <div ref={containerRef} className="relative">
-        <svg width={dimensions.width} height={dimensions.height} className="mx-auto">
+        <svg
+          width={dimensions.width}
+          height={dimensions.height}
+          className="mx-auto"
+        >
           {/* Grid lines and values */}
           {[...Array(5)].map((_, i) => (
             <g key={i}>
               <line
                 x1={padding.left}
-                y1={padding.top + (i * chartHeight / 4)}
+                y1={padding.top + (i * chartHeight) / 4}
                 x2={dimensions.width - padding.right}
-                y2={padding.top + (i * chartHeight / 4)}
+                y2={padding.top + (i * chartHeight) / 4}
                 stroke="#e5e7eb"
                 strokeDasharray="4"
               />
               <text
                 x={padding.left - 10}
-                y={padding.top + (i * chartHeight / 4)}
+                y={padding.top + (i * chartHeight) / 4}
                 textAnchor="end"
                 alignmentBaseline="middle"
                 className="text-xs text-gray-500"
               >
-                {Math.round(maxValue - ((i * maxValue) / 4)).toLocaleString()}
+                {Math.round(maxValue - (i * maxValue) / 4).toLocaleString()}
               </text>
             </g>
           ))}
@@ -77,10 +91,12 @@ export default function RevenueChart({ data }: { data: MonthlyRevenue[] }) {
           {data.map((month, i) => (
             <g key={i}>
               <text
-                x={(i * (chartWidth / (data.length - 1))) + padding.left}
+                x={i * (chartWidth / (data.length - 1)) + padding.left}
                 y={dimensions.height - padding.bottom + 10}
                 textAnchor="end"
-                transform={`rotate(45, ${(i * (chartWidth / (data.length - 1))) + padding.left}, ${dimensions.height - padding.bottom + 10})`}
+                transform={`rotate(45, ${
+                  i * (chartWidth / (data.length - 1)) + padding.left
+                }, ${dimensions.height - padding.bottom + 10})`}
                 className="text-xs text-gray-500"
               >
                 {month.month}
@@ -141,7 +157,10 @@ export default function RevenueChart({ data }: { data: MonthlyRevenue[] }) {
             <span className="text-sm text-gray-600">المبلغ المحصل</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-0.5 bg-[#67B37D] opacity-50" style={{ borderTop: '2px dashed' }} />
+            <div
+              className="w-4 h-0.5 bg-[#67B37D] opacity-50"
+              style={{ borderTop: "2px dashed" }}
+            />
             <span className="text-sm text-gray-600">المبلغ المراد تحصيله</span>
           </div>
         </div>

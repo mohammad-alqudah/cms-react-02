@@ -1,7 +1,6 @@
-import React from 'react';
-import { ArrowRight, User } from 'lucide-react';
-import { formatDate } from '../../utils/date';
-import type { StudentDetails } from '../../types/student';
+import { ArrowRight, User } from "lucide-react";
+import { formatDate } from "../../utils/date";
+import type { StudentDetails } from "../../types/student";
 
 interface StudentHeaderProps {
   student: StudentDetails;
@@ -14,9 +13,9 @@ export default function StudentHeader({ student, onBack }: StudentHeaderProps) {
       <div className="flex items-center gap-6">
         <div className="relative w-24 h-24 rounded-full overflow-hidden bg-gray-100">
           {student.image ? (
-            <img 
-              src={student.image} 
-              alt={student.name} 
+            <img
+              src={student.image}
+              alt={student.name}
               className="w-full h-full object-cover"
             />
           ) : (

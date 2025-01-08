@@ -1,9 +1,9 @@
-const API_BASE_URL = 'https://cms-app-iu3yo.ondigitalocean.app';
+const API_BASE_URL = "https://cms-app-iu3yo.ondigitalocean.app";
 
 export async function get<T>(endpoint: string, token: string): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -16,9 +16,9 @@ export async function get<T>(endpoint: string, token: string): Promise<T> {
 
 export async function post<T>(endpoint: string, data: any): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
   });

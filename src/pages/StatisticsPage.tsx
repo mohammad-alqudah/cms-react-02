@@ -1,9 +1,15 @@
-import { useEffect, useState } from 'react';
-import Statistics from '../components/Statistics';
-import RevenueChart from '../components/RevenueChart';
-import { getDashboardStats, getDashboardMetrics } from '../services/dashboard/api';
-import { mapApiStatsToRevenueData, mapApiMetricsToStats } from '../services/dashboard/mapper';
-import type { Statistics as StatsType, MonthlyRevenue } from '../types';
+import { useEffect, useState } from "react";
+import Statistics from "../components/Statistics";
+import RevenueChart from "../components/RevenueChart";
+import {
+  getDashboardStats,
+  getDashboardMetrics,
+} from "../services/dashboard/api";
+import {
+  mapApiStatsToRevenueData,
+  mapApiMetricsToStats,
+} from "../services/dashboard/mapper";
+import type { Statistics as StatsType, MonthlyRevenue } from "../types";
 
 export default function StatisticsPage() {
   const [revenueData, setRevenueData] = useState<MonthlyRevenue[]>([]);
@@ -17,13 +23,17 @@ export default function StatisticsPage() {
         setIsLoading(true);
         const [statsResponse, metricsResponse] = await Promise.all([
           getDashboardStats(),
-          getDashboardMetrics()
+          getDashboardMetrics(),
         ]);
-        
+
         setRevenueData(mapApiStatsToRevenueData(statsResponse.data));
         setStats(mapApiMetricsToStats(metricsResponse.data));
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch dashboard statistics');
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to fetch dashboard statistics"
+        );
       } finally {
         setIsLoading(false);
       }

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Book } from 'lucide-react';
-import Card from '../ui/Card';
-import CoursePayments from './CoursePayments';
-import { formatDate } from '../../utils/date';
-import type { StudentCourse } from '../../types/student';
+import { useState } from "react";
+import { ChevronDown, ChevronUp, Book } from "lucide-react";
+import Card from "../ui/Card";
+import CoursePayments from "./CoursePayments";
+import { formatDate } from "../../utils/date";
+import type { StudentCourse } from "../../types/student";
 
 interface StudentCoursesProps {
   courses: StudentCourse[];
@@ -14,12 +14,18 @@ export default function StudentCourses({ courses }: StudentCoursesProps) {
 
   return (
     <Card>
-      <h2 className="text-lg font-medium text-gray-900 mb-6">الدورات المسجلة</h2>
+      <h2 className="text-lg font-medium text-gray-900 mb-6">
+        الدورات المسجلة
+      </h2>
       <div className="space-y-4">
         {courses.map((course) => (
           <div key={course.id} className="border border-gray-100 rounded-lg">
             <button
-              onClick={() => setExpandedCourseId(expandedCourseId === course.id ? null : course.id)}
+              onClick={() =>
+                setExpandedCourseId(
+                  expandedCourseId === course.id ? null : course.id
+                )
+              }
               className="w-full flex items-center justify-between p-4 hover:bg-gray-50"
             >
               <div className="flex items-center gap-3">
@@ -27,7 +33,8 @@ export default function StudentCourses({ courses }: StudentCoursesProps) {
                 <div className="text-right">
                   <p className="font-medium">{course.name}</p>
                   <p className="text-sm text-gray-500">
-                    المدرب: {course.instructor} | تاريخ البدء: {formatDate(course.start_date)}
+                    المدرب: {course.instructor} | تاريخ البدء:{" "}
+                    {formatDate(course.start_date)}
                   </p>
                 </div>
               </div>

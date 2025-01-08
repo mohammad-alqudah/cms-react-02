@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import StudentDetailsView from '../components/student/StudentDetailsView';
-import { getStudentDetails, getStudentCourses } from '../services/students/api';
-import type { StudentDetails, StudentCourse } from '../types/student';
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import StudentDetailsView from "../components/student/StudentDetailsView";
+import { getStudentDetails, getStudentCourses } from "../services/students/api";
+import type { StudentDetails, StudentCourse } from "../types/student";
 
 export default function StudentDetailsPage() {
   const { id } = useParams();
@@ -20,13 +20,15 @@ export default function StudentDetailsPage() {
         setIsLoading(true);
         const [detailsResponse, coursesResponse] = await Promise.all([
           getStudentDetails(id),
-          getStudentCourses(id)
+          getStudentCourses(id),
         ]);
-        
+
         setStudent(detailsResponse.data);
         setCourses(coursesResponse.data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch student data');
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch student data"
+        );
       } finally {
         setIsLoading(false);
       }
@@ -55,7 +57,7 @@ export default function StudentDetailsPage() {
     <StudentDetailsView
       student={student}
       courses={courses}
-      onBack={() => navigate('/students')}
+      onBack={() => navigate("/students")}
     />
   );
 }

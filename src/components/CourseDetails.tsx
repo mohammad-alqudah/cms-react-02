@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { ArrowRight, Loader2 } from 'lucide-react';
-import type { CourseDetails as CourseDetailsType, CourseStudent } from '../types/course';
-import { finishCourse } from '../services/courses/api';
-import Card from './ui/Card';
-import CourseStudentsTable from './course/CourseStudentsTable';
+import { useState } from "react";
+import { ArrowRight, Loader2 } from "lucide-react";
+import type {
+  CourseDetails as CourseDetailsType,
+  CourseStudent,
+} from "../types/course";
+import { finishCourse } from "../services/courses/api";
+import Card from "./ui/Card";
+import CourseStudentsTable from "./course/CourseStudentsTable";
 
 interface CourseDetailsProps {
   details: CourseDetailsType;
@@ -11,7 +14,11 @@ interface CourseDetailsProps {
   onCourseFinished?: () => void;
 }
 
-export default function CourseDetails({ details, onBack, onCourseFinished }: CourseDetailsProps) {
+export default function CourseDetails({
+  details,
+  onBack,
+  onCourseFinished,
+}: CourseDetailsProps) {
   const [students, setStudents] = useState<CourseStudent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +30,7 @@ export default function CourseDetails({ details, onBack, onCourseFinished }: Cou
       await finishCourse(details.id);
       onCourseFinished?.();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to finish course');
+      setError(err instanceof Error ? err.message : "Failed to finish course");
     } finally {
       setIsFinishing(false);
     }
@@ -49,7 +56,7 @@ export default function CourseDetails({ details, onBack, onCourseFinished }: Cou
             {isFinishing ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              'إنهاء الدورة'
+              "إنهاء الدورة"
             )}
           </button>
         )}
@@ -98,11 +105,15 @@ export default function CourseDetails({ details, onBack, onCourseFinished }: Cou
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-purple-50 p-4 rounded-lg">
               <p className="text-gray-600">المبلغ المحصل</p>
-              <p className="text-2xl font-bold">{details.collectedAmount} دينار</p>
+              <p className="text-2xl font-bold">
+                {details.collectedAmount} دينار
+              </p>
             </div>
             <div className="bg-indigo-50 p-4 rounded-lg">
               <p className="text-gray-600">المبلغ المتوقع</p>
-              <p className="text-2xl font-bold">{details.expectedAmount} دينار</p>
+              <p className="text-2xl font-bold">
+                {details.expectedAmount} دينار
+              </p>
             </div>
             <div className="bg-pink-50 p-4 rounded-lg">
               <p className="text-gray-600">نسبة التحصيل</p>
