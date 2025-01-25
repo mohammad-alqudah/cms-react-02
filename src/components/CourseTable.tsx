@@ -8,6 +8,7 @@ import TableFilters from "./table/TableFilters";
 import DataTable from "./table/DataTable";
 import Pagination from "./Pagination";
 import Card from "./ui/Card";
+import ReactTable from "./ReactTable";
 
 interface CourseTableProps {
   onCourseClick: (courseId: string) => void;
@@ -160,6 +161,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
             sort={sort}
             onSort={handleSort}
           />
+          {/* <ReactTable /> */}
           <Pagination
             currentPage={currentPage}
             hasNext={hasNext}

@@ -15,7 +15,7 @@ export async function getCourses(
     throw new Error("No authentication tokens found");
   }
 
-  let endpoint = `/tajweed/dashboard/courses/?page=${page}`;
+  let endpoint = `tajweed/dashboard/courses/?page=${page}`;
   if (sort?.field && sort?.direction) {
     endpoint += `&sort=${encodeURIComponent(
       sort.field
@@ -33,7 +33,7 @@ export async function getCourseDetails(
     throw new Error("No authentication tokens found");
   }
 
-  return get(`/tajweed/dashboard/course/${courseId}/`, tokens.access);
+  return get(`tajweed/dashboard/course/${courseId}/`, tokens.access);
 }
 
 export async function getCourseStudents(
@@ -44,7 +44,7 @@ export async function getCourseStudents(
     throw new Error("No authentication tokens found");
   }
 
-  return get(`/tajweed/dashboard/course/${courseId}/students`, tokens.access);
+  return get(`tajweed/dashboard/course/${courseId}/students`, tokens.access);
 }
 
 export async function finishCourse(

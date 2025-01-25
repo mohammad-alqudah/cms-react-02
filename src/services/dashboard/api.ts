@@ -4,7 +4,7 @@ import type {
   ApiDashboardMetrics,
 } from "../../types/dashboard";
 
-const API_BASE_URL = "https://cms-app-iu3yo.ondigitalocean.app";
+const API_BASE_URL = "https://cms-app.org/";
 
 export async function getDashboardStats(): Promise<{
   data: ApiDashboardStats;
@@ -16,7 +16,7 @@ export async function getDashboardStats(): Promise<{
     throw new Error("No authentication tokens found");
   }
 
-  const response = await fetch(`${API_BASE_URL}/tajweed/dashboard/index`, {
+  const response = await fetch(`${API_BASE_URL}tajweed/dashboard/index`, {
     headers: {
       Authorization: `Bearer ${tokens.access}`,
     },
@@ -40,7 +40,7 @@ export async function getDashboardMetrics(): Promise<{
   }
 
   const response = await fetch(
-    `${API_BASE_URL}/tajweed/dashboard/index/data_over_time`,
+    `${API_BASE_URL}tajweed/dashboard/index/data_over_time`,
     {
       headers: {
         Authorization: `Bearer ${tokens.access}`,
