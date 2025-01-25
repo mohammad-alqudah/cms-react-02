@@ -1,15 +1,15 @@
 import { get, post } from "../api";
 import { getStoredTokens } from "../auth";
-import type {
-  CourseResponse,
-  ApiCourseDetails,
-  ApiCourseStudent,
-} from "../../types/course";
+// import type {
+//   CourseResponse,
+//   ApiCourseDetails,
+//   ApiCourseStudent,
+// } from "../../types/course";
 
 export async function getCourses(
   page: number = 1,
   sort?: { field: string; direction: "asc" | "desc" | null }
-): Promise<CourseResponse> {
+): Promise<any> {
   const tokens = getStoredTokens();
   if (!tokens) {
     throw new Error("No authentication tokens found");
@@ -22,12 +22,12 @@ export async function getCourses(
     )}&order=${encodeURIComponent(sort.direction)}`;
   }
 
-  return get<CourseResponse>(endpoint, tokens.access);
+  return get<any>(endpoint, tokens.access);
 }
 
 export async function getCourseDetails(
   courseId: string
-): Promise<{ data: ApiCourseDetails; status: boolean; error: null }> {
+): Promise<{ data: any; status: boolean; error: null }> {
   const tokens = getStoredTokens();
   if (!tokens) {
     throw new Error("No authentication tokens found");
@@ -38,7 +38,7 @@ export async function getCourseDetails(
 
 export async function getCourseStudents(
   courseId: string
-): Promise<{ data: ApiCourseStudent[]; status: boolean; error: null }> {
+): Promise<{ data: any[]; status: boolean; error: null }> {
   const tokens = getStoredTokens();
   if (!tokens) {
     throw new Error("No authentication tokens found");

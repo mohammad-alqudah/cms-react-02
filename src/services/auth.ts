@@ -1,7 +1,7 @@
-import type { LoginCredentials, AuthTokens, ApiResponse } from '../types/auth';
-import { post } from './api';
+import type { LoginCredentials, AuthTokens, ApiResponse } from "../types/auth";
+import { post } from "./api";
 
-const TOKEN_KEY = 'tajweed_auth_tokens';
+const TOKEN_KEY = "tajweed_auth_tokens";
 
 export function getStoredTokens(): AuthTokens | null {
   try {
@@ -24,12 +24,17 @@ export function isAuthenticated(): boolean {
   return !!getStoredTokens();
 }
 
-export async function login(credentials: LoginCredentials): Promise<ApiResponse<{ tokens: AuthTokens }>> {
-  const response = await post<ApiResponse<{ tokens: AuthTokens }>>('/account/login/', credentials);
-  
+export async function login(
+  credentials: LoginCredentials
+): Promise<ApiResponse<{ tokens: AuthTokens }>> {
+  const response = await post<ApiResponse<{ tokens: AuthTokens }>>(
+    "/dashboard/login/",
+    credentials
+  );
+
   if (response.status && response.data.tokens) {
     storeTokens(response.data.tokens);
   }
-  
+
   return response;
 }
