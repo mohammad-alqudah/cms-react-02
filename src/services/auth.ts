@@ -28,7 +28,7 @@ export async function login(
   credentials: LoginCredentials
 ): Promise<ApiResponse<{ tokens: AuthTokens }>> {
   const response = await post<ApiResponse<{ tokens: AuthTokens }>>(
-    "/dashboard/login/",
+    "account/dashboard/login/",
     credentials
   );
 
