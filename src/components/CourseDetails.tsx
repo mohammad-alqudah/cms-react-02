@@ -67,7 +67,7 @@ export default function CourseDetails({
           <span>العودة إلى قائمة الدورات</span>
         </button>
 
-        {!details.finishedAt && (
+        {details.finished_at == null ? (
           <button
             onClick={handleFinishCourse}
             disabled={isFinishing}
@@ -79,6 +79,8 @@ export default function CourseDetails({
               "إنهاء الدورة"
             )}
           </button>
+        ) : (
+          ""
         )}
       </div>
 
