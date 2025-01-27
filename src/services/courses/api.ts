@@ -8,19 +8,33 @@ import { getStoredTokens } from "../auth";
 
 export async function getCourses(
   page: number = 1,
-  sort?: { field: string; direction: "asc" | "desc" | null }
+  sort?: { field: string; direction: "asc" | "desc" | null },
+  search?: string,
+  startDate?: string,
+  endDate?: string,
+  courseType?: string
 ): Promise<any> {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    ...(sort?.field && { sort: `${sort.field}` }),
+    ...(sort?.direction && { order: `${sort.direction}` }),
+    ...(search && { search }),
+    ...(startDate && { start_date: startDate }),
+    ...(endDate && { end_date: endDate }),
+    ...(courseType && { type: courseType }),
+  });
+
   const tokens = getStoredTokens();
   if (!tokens) {
     throw new Error("No authentication tokens found");
   }
 
-  let endpoint = `tajweed/dashboard/courses/?page=${page}`;
-  if (sort?.field && sort?.direction) {
-    endpoint += `&sort=${encodeURIComponent(
-      sort.field
-    )}&order=${encodeURIComponent(sort.direction)}`;
-  }
+  let endpoint = `tajweed/dashboard/courses/?${params.toString()}`;
+  // if (sort?.field && sort?.direction) {
+  //   endpoint += `&sort=${encodeURIComponent(
+  //     sort.field
+  //   )}&order=${encodeURIComponent(sort.direction)}&${params.toString()}`;
+  // }
 
   return get<any>(endpoint, tokens.access);
 }
@@ -66,5 +80,5 @@ export async function finishCourse(
     throw new Error("No authentication tokens found");
   }
 
-  return post(`/tajweed/dashboard/finish_course/${courseId}/`, {});
+  return post(`tajweed/dashboard/finish_course/${courseId}/`, {});
 }

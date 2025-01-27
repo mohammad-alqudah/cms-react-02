@@ -44,8 +44,6 @@ export default function CourseDetails({
     fetchStudents();
   }, [details.id]);
 
-  console.log("details", details);
-
   const handleFinishCourse = async () => {
     try {
       setIsFinishing(true);
