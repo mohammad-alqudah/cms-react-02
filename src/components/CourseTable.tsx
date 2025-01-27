@@ -27,6 +27,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [courseType, setCourseType] = useState<any>();
+  const [courseTypeId, setCourseTypeId] = useState<any>();
   const [sort, setSort] = useState<{
     field: string;
     direction: "asc" | "desc" | null;
@@ -36,16 +37,18 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
   });
 
   useEffect(() => {
-    async function fetchCourses() {
+    async function fetchFilteredCourses() {
       try {
         setIsLoading(true);
         const response = await getCourses(
           currentPage,
-          sort.direction ? sort : undefined
+          sort.direction ? sort : undefined,
+          search,
+          startDate,
+          endDate,
+          courseTypeId
         );
-        const getCourseType = await getCoursesType();
         setCourses(response.data.map(mapApiCourseToModel));
-        setCourseType(getCourseType.data);
         setTotalCount(response.count);
         setHasNext(!!response.next);
         setHasPrevious(!!response.previous);
@@ -59,8 +62,28 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
       }
     }
 
-    fetchCourses();
-  }, [currentPage, sort]);
+    fetchFilteredCourses();
+  }, [currentPage, sort, search, startDate, endDate, courseTypeId]);
+
+  useEffect(() => {
+    async function fetchCoursesType() {
+      try {
+        setIsLoading(true);
+        const response = await getCoursesType();
+        setCourseType(response.data.map(mapApiCourseToModel));
+
+        setError(null);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch courses"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchCoursesType();
+  }, []);
 
   const handleSort = (field: string) => {
     setSort((prev) => ({
@@ -152,6 +175,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
         onStartDateChange={setStartDate}
         onEndDateChange={setEndDate}
         courseType={courseType}
+        setCourseTypeId={setCourseTypeId}
       />
 
       {isLoading ? (

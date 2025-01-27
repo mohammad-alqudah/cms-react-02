@@ -10,6 +10,7 @@ interface TableFiltersProps {
   onStartDateChange: (value: string) => void;
   onEndDateChange: (value: string) => void;
   courseType: any[];
+  setCourseTypeId: (value: string) => void;
 }
 
 export default function TableFilters({
@@ -21,6 +22,7 @@ export default function TableFilters({
   onStartDateChange,
   onEndDateChange,
   courseType,
+  setCourseTypeId,
 }: TableFiltersProps) {
   if (!show) return null;
 
@@ -43,6 +45,10 @@ export default function TableFilters({
             name="course_type"
             id="course_type"
             className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#67B37D] focus:border-transparent"
+            onChange={(e) => {
+              console.log(e.target.value, "eeee");
+              setCourseTypeId(e.target.value);
+            }}
           >
             {courseType.map((type: any, idx) => (
               <option key={idx} value={type.id}>

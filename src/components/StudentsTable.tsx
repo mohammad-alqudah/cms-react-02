@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Filter } from 'lucide-react';
-import { getStudents, getStudentDetails, getStudentCourses } from '../services/students/api';
-import { mapApiStudentToModel } from '../services/students/mapper';
-import type { Student, StudentDetails, StudentCourse } from '../types/student';
-import TableFilters from './table/TableFilters';
-import DataTable from './table/DataTable';
-import Pagination from './Pagination';
-import StudentDetailsView from './student/StudentDetailsView';
-import Card from './ui/Card';
+import { useState, useEffect } from "react";
+import { Filter } from "lucide-react";
+import {
+  getStudents,
+  getStudentDetails,
+  getStudentCourses,
+} from "../services/students/api";
+import { mapApiStudentToModel } from "../services/students/mapper";
+import type { StudentDetails, StudentCourse } from "../types/student";
+import TableFilters from "./table/TableFilters";
+import DataTable from "./table/DataTable";
+import Pagination from "./Pagination";
+import StudentDetailsView from "./student/StudentDetailsView";
+import Card from "./ui/Card";
 
 export default function StudentsTable() {
-  const [students, setStudents] = useState<Student[]>([]);
+  const [students, setStudents] = useState<StudentDetails[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [hasNext, setHasNext] = useState(false);
@@ -18,13 +22,17 @@ export default function StudentsTable() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
-  const [search, setSearch] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  
+  const [search, setSearch] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
   // New state for student details
-  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
-  const [selectedStudent, setSelectedStudent] = useState<StudentDetails | null>(null);
+  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(
+    null
+  );
+  const [selectedStudent, setSelectedStudent] = useState<StudentDetails | null>(
+    null
+  );
   const [studentCourses, setStudentCourses] = useState<StudentCourse[]>([]);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
@@ -33,14 +41,16 @@ export default function StudentsTable() {
       try {
         setIsLoading(true);
         const response = await getStudents(currentPage);
-        
+
         setStudents(response.data.map(mapApiStudentToModel));
-        setTotalCount(response.count);
+        setTotalCount(Number(response.count));
         setHasNext(!!response.next);
         setHasPrevious(!!response.previous);
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch students');
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch students"
+        );
       } finally {
         setIsLoading(false);
       }
@@ -53,17 +63,19 @@ export default function StudentsTable() {
     try {
       setIsLoadingDetails(true);
       setSelectedStudentId(studentId);
-      
+
       // Fetch both student details and courses in parallel
       const [detailsResponse, coursesResponse] = await Promise.all([
         getStudentDetails(studentId),
-        getStudentCourses(studentId)
+        getStudentCourses(studentId),
       ]);
-      
+
       setSelectedStudent(detailsResponse.data);
       setStudentCourses(coursesResponse.data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch student details');
+      setError(
+        err instanceof Error ? err.message : "Failed to fetch student details"
+      );
     } finally {
       setIsLoadingDetails(false);
     }
@@ -81,7 +93,7 @@ export default function StudentsTable() {
     { label: "العمر", field: "age" },
     { label: "المستوى التعليمي", field: "educationLevel" },
     { label: "رقم الهاتف", field: "mobileNumber" },
-    { label: "ملاحظات", field: "notes" }
+    { label: "ملاحظات", field: "notes" },
   ];
 
   if (error) {
@@ -107,18 +119,20 @@ export default function StudentsTable() {
       <div className="flex justify-between items-center mb-6">
         <div className="space-y-1">
           <h2 className="text-2xl font-bold text-gray-800">الطلاب</h2>
-          <p className="text-sm text-gray-500">إجمالي عدد الطلاب: {totalCount}</p>
+          <p className="text-sm text-gray-500">
+            إجمالي عدد الطلاب: {totalCount}
+          </p>
         </div>
-        <button
+        {/* <button
           onClick={() => setShowFilters(!showFilters)}
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#67B37D] hover:bg-[#67B37D]/10 rounded-lg transition-colors"
         >
           <Filter className="h-4 w-4" />
-          {showFilters ? 'إخفاء الفلترة' : 'إظهار الفلترة'}
-        </button>
+          {showFilters ? "إخفاء الفلترة" : "إظهار الفلترة"}
+        </button> */}
       </div>
 
-      <TableFilters
+      {/* <TableFilters
         show={showFilters}
         search={search}
         onSearchChange={setSearch}
@@ -126,7 +140,8 @@ export default function StudentsTable() {
         endDate={endDate}
         onStartDateChange={setStartDate}
         onEndDateChange={setEndDate}
-      />
+
+      /> */}
 
       {isLoading || isLoadingDetails ? (
         <div className="text-center py-8">جاري التحميل...</div>

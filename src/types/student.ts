@@ -1,5 +1,9 @@
 // Add to existing types
 export interface StudentDetails {
+  previous: any;
+  next: any;
+  count(count: any): unknown;
+  data: any;
   id: string;
   name: string;
   image: string | null;
@@ -24,5 +28,5 @@ export interface Payment {
   id: string;
   amount: number;
   date: string;
-  status: 'paid' | 'pending' | 'overdue';
+  status: "paid" | "pending" | "overdue";
 }
