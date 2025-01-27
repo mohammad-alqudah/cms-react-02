@@ -19,7 +19,7 @@ export async function getCourses(
     ...(sort?.field && { sort: `${sort.field}` }),
     ...(sort?.direction && { order: `${sort.direction}` }),
     ...(search && { search }),
-    ...(startDate && { start_date: startDate }),
+    ...(startDate && { date: startDate }),
     ...(endDate && { end_date: endDate }),
     ...(courseType && { type: courseType }),
   });

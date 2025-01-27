@@ -51,9 +51,12 @@ export default function TableFilters({
             }}
           >
             {courseType.map((type: any, idx) => (
-              <option key={idx} value={type.id}>
-                {type.name}
-              </option>
+              <>
+                <option value="">اختر</option>
+                <option key={idx} value={type.id}>
+                  {type.name}
+                </option>
+              </>
             ))}
           </select>
         </div>
