@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
-import type {
-  CourseDetails as CourseDetailsType,
-  CourseStudent,
-} from "../types/course";
-import { finishCourse } from "../services/courses/api";
+// import type {
+//   CourseDetails as CourseDetailsType,
+//   CourseStudent,
+// } from "../types/course";
+import { finishCourse, getCourseStudents } from "../services/courses/api";
 import Card from "./ui/Card";
 import CourseStudentsTable from "./course/CourseStudentsTable";
+// import { mapApiCourseToModel } from "../services/courses";
 
 interface CourseDetailsProps {
-  details: CourseDetailsType;
+  details: any;
   onBack: () => void;
   onCourseFinished?: () => void;
 }
@@ -19,10 +20,31 @@ export default function CourseDetails({
   onBack,
   onCourseFinished,
 }: CourseDetailsProps) {
-  const [students, setStudents] = useState<CourseStudent[]>([]);
+  const [students, setStudents] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFinishing, setIsFinishing] = useState(false);
+
+  useEffect(() => {
+    async function fetchStudents() {
+      try {
+        setIsLoading(true);
+        const response = await getCourseStudents(details.id);
+        console.log("response", response);
+        setStudents(response.data);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch students"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchStudents();
+  }, [details.id]);
+
+  console.log("details", details);
 
   const handleFinishCourse = async () => {
     try {
@@ -51,7 +73,7 @@ export default function CourseDetails({
           <button
             onClick={handleFinishCourse}
             disabled={isFinishing}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#67B37D] hover:bg-[#67B37D]/90 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isFinishing ? (
               <Loader2 className="h-4 w-4 animate-spin" />

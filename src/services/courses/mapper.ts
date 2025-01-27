@@ -1,5 +1,12 @@
-import { formatDate } from '../../utils/date';
-import type { ApiCourse, Course, ApiCourseDetails, CourseDetails, ApiCourseStudent, CourseStudent } from '../../types/course';
+import { formatDate } from "../../utils/date";
+import type {
+  ApiCourse,
+  Course,
+  ApiCourseDetails,
+  CourseDetails,
+  ApiCourseStudent,
+  CourseStudent,
+} from "../../types/course";
 
 export function mapApiCourseToModel(apiCourse: ApiCourse): Course {
   return {
@@ -12,16 +19,18 @@ export function mapApiCourseToModel(apiCourse: ApiCourse): Course {
     studentCount: apiCourse.number_of_students,
     sessionsCount: apiCourse.number_of_sessions,
     attendanceRate: apiCourse.attendance_percentage,
-    collectedAmount: parseFloat(apiCourse.payment || '0'),
+    collectedAmount: parseFloat(apiCourse.payment || "0"),
     expectedAmount: parseFloat(apiCourse.payment_goal),
     paymentRate: apiCourse.payment_percentage || 0,
     alert: apiCourse.alert,
   };
 }
 
-export function mapApiCourseDetailsToModel(apiResponse: ApiCourseDetails): CourseDetails {
+export function mapApiCourseDetailsToModel(
+  apiResponse: ApiCourseDetails
+): CourseDetails {
   const apiDetails = apiResponse.data;
-  
+
   return {
     id: apiDetails.id.toString(),
     name: apiDetails.name,
@@ -36,10 +45,13 @@ export function mapApiCourseDetailsToModel(apiResponse: ApiCourseDetails): Cours
     collectedAmount: apiDetails.payment || 0,
     expectedAmount: parseFloat(apiDetails.payment_goal),
     paymentRate: apiDetails.payment_percentage || 0,
+    finished_at: apiDetails.finished_at,
   };
 }
 
-export function mapApiCourseStudentToModel(apiStudent: ApiCourseStudent): CourseStudent {
+export function mapApiCourseStudentToModel(
+  apiStudent: ApiCourseStudent
+): CourseStudent {
   return {
     id: apiStudent.id.toString(),
     name: apiStudent.name,

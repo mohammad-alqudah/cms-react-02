@@ -25,6 +25,17 @@ export async function getCourses(
   return get<any>(endpoint, tokens.access);
 }
 
+export async function getCoursesType(): Promise<any> {
+  const tokens = getStoredTokens();
+  if (!tokens) {
+    throw new Error("No authentication tokens found");
+  }
+
+  let endpoint = `tajweed/courses/types/`;
+
+  return get<any>(endpoint, tokens.access);
+}
+
 export async function getCourseDetails(
   courseId: string
 ): Promise<{ data: any; status: boolean; error: null }> {

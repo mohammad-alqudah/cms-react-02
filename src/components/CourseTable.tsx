@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Filter } from "lucide-react";
-import { getCourses } from "../services/courses/api";
+import { getCourses, getCoursesType } from "../services/courses/api";
 import { mapApiCourseToModel } from "../services/courses/mapper";
 import { formatDate } from "../utils/date";
 import type { Course } from "../types/course";
@@ -8,7 +8,7 @@ import TableFilters from "./table/TableFilters";
 import DataTable from "./table/DataTable";
 import Pagination from "./Pagination";
 import Card from "./ui/Card";
-import ReactTable from "./ReactTable";
+// import ReactTable from "./ReactTable";
 
 interface CourseTableProps {
   onCourseClick: (courseId: string) => void;
@@ -26,6 +26,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
   const [search, setSearch] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [courseType, setCourseType] = useState<any>();
   const [sort, setSort] = useState<{
     field: string;
     direction: "asc" | "desc" | null;
@@ -42,7 +43,9 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
           currentPage,
           sort.direction ? sort : undefined
         );
+        const getCourseType = await getCoursesType();
         setCourses(response.data.map(mapApiCourseToModel));
+        setCourseType(getCourseType.data);
         setTotalCount(response.count);
         setHasNext(!!response.next);
         setHasPrevious(!!response.previous);
@@ -148,6 +151,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
         endDate={endDate}
         onStartDateChange={setStartDate}
         onEndDateChange={setEndDate}
+        courseType={courseType}
       />
 
       {isLoading ? (

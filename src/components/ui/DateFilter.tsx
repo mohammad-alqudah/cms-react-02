@@ -1,5 +1,4 @@
-import React from 'react';
-import { Calendar } from 'lucide-react';
+import { Calendar } from "lucide-react";
 
 interface DateFilterProps {
   startDate: string;

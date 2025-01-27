@@ -1,9 +1,10 @@
-import type { CourseStudent } from "../../types/course";
+// import type { CourseStudent } from "../../types/course";
 import { getAttendanceStatusColor } from "../../utils/attendance";
+import { formatDate, getNumberBeforeDot } from "../../utils/date";
 import Card from "../ui/Card";
 
 interface CourseStudentsTableProps {
-  students: CourseStudent[];
+  students: any[];
 }
 
 export default function CourseStudentsTable({
@@ -70,24 +71,26 @@ export default function CourseStudentsTable({
                   {student.age}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {student.enrollmentDate}
+                  {formatDate(student.enrollment_date)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {student.attendedSessionsCount}
+                  {student.attended_sessions_count}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {student.attendancePercentage}%
+                  {getNumberBeforeDot(student.attendance_percentage)}%
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {student.totalPayment ? `${student.totalPayment} دينار` : "-"}
+                  {student.total_payment
+                    ? `${student.total_payment} دينار`
+                    : "-"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <span
                     className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getAttendanceStatusColor(
-                      student.attendanceStatus
+                      student.attendance_status
                     )}`}
                   >
-                    {student.attendanceStatus}
+                    {student.attendance_status}
                   </span>
                 </td>
               </tr>

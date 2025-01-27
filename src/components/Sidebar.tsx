@@ -1,7 +1,7 @@
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Book, Users, BarChart, X, LogOut } from 'lucide-react';
-import { removeTokens } from '../services/auth';
-import { useAuth } from '../contexts/AuthContext';
+import { useNavigate, useLocation } from "react-router-dom";
+import { Book, Users, BarChart, X, LogOut } from "lucide-react";
+import { removeTokens } from "../services/auth";
+import { useAuth } from "../contexts/AuthContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -37,31 +37,35 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="px-4 space-y-2">
           <button
             onClick={() => {
-              navigate('/courses');
+              navigate("/courses");
               onClose();
             }}
             className={`flex items-center w-full px-4 py-2 text-gray-700 rounded-lg ${
-              getActivePath('/courses') ? 'bg-[#67B37D]/10 text-[#67B37D]' : 'hover:bg-gray-100'
+              getActivePath("/courses")
+                ? "bg-[#67B37D]/10 text-[#67B37D]"
+                : "hover:bg-gray-100"
             }`}
           >
             <Book className="h-5 w-5 ml-3" />
             <span className="font-medium">دورات التجويد</span>
           </button>
-          
+
           <button
             onClick={() => {
-              navigate('/students');
+              navigate("/students");
               onClose();
             }}
             className={`flex items-center w-full px-4 py-2 text-gray-700 rounded-lg ${
-              getActivePath('/students') ? 'bg-[#67B37D]/10 text-[#67B37D]' : 'hover:bg-gray-100'
+              getActivePath("/students")
+                ? "bg-[#67B37D]/10 text-[#67B37D]"
+                : "hover:bg-gray-100"
             }`}
           >
             <Users className="h-5 w-5 ml-3" />
             <span className="font-medium">الطلاب</span>
           </button>
 
-          <button
+          {/* <button
             onClick={() => {
               navigate('/statistics');
               onClose();
@@ -72,7 +76,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           >
             <BarChart className="h-5 w-5 ml-3" />
             <span className="font-medium">احصائيات</span>
-          </button>
+          </button> */}
         </div>
 
         <div className="px-4 pb-6">
@@ -93,7 +97,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Mobile sidebar */}
       {isOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={onClose} />
+          <div
+            className="fixed inset-0 bg-gray-600 bg-opacity-75"
+            onClick={onClose}
+          />
           <div className="fixed inset-y-0 right-0 w-64 bg-white shadow-xl">
             {sidebarContent}
           </div>
