@@ -46,13 +46,14 @@ export default function TableFilters({
             id="course_type"
             className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#67B37D] focus:border-transparent"
             onChange={(e) => {
-              console.log(e.target.value, "eeee");
               setCourseTypeId(e.target.value);
             }}
           >
             {courseType.map((type: any, idx) => (
               <>
-                <option value="">اختر</option>
+                <option value="" defaultChecked>
+                  اختر
+                </option>
                 <option key={idx} value={type.id}>
                   {type.name}
                 </option>

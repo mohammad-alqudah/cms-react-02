@@ -80,5 +80,9 @@ export async function finishCourse(
     throw new Error("No authentication tokens found");
   }
 
-  return post(`tajweed/dashboard/finish_course/${courseId}/`, {});
+  return post(
+    `tajweed/dashboard/finish_course/${courseId}/`,
+    {},
+    tokens.access
+  );
 }

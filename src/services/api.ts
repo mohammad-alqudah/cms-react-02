@@ -14,11 +14,16 @@ export async function get<T>(endpoint: string, token: string): Promise<T> {
   return response.json();
 }
 
-export async function post<T>(endpoint: string, data: any): Promise<T> {
+export async function post<T>(
+  endpoint: string,
+  data: any,
+  token: string
+): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   });
