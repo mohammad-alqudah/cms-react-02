@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { Phone, Lock, Loader2 } from 'lucide-react';
-import { login } from '../services/auth';
-import { useAuth } from '../contexts/AuthContext';
+import { useState } from "react";
+import { Phone, Lock, Loader2 } from "lucide-react";
+import { login } from "../services/auth";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function LoginForm() {
-  const [mobileNumber, setMobileNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { setIsAuthenticated } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
 
     try {
@@ -23,11 +23,12 @@ export default function LoginForm() {
 
       if (response.status) {
         setIsAuthenticated(true);
+        window.location.href = "/";
       } else {
-        setError(response.error || 'حدث خطأ أثناء تسجيل الدخول');
+        setError(response.error || "حدث خطأ أثناء تسجيل الدخول");
       }
     } catch (err) {
-      setError('حدث خطأ أثناء الاتصال بالخادم');
+      setError("حدث خطأ أثناء الاتصال بالخادم");
     } finally {
       setIsLoading(false);
     }
@@ -39,9 +40,11 @@ export default function LoginForm() {
         <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-[#67B37D]/10">
           <Phone className="h-6 w-6 text-[#67B37D]" />
         </div>
-        <h2 className="mt-6 text-3xl font-extrabold text-gray-900">تسجيل الدخول</h2>
+        <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+          تسجيل الدخول
+        </h2>
       </div>
-      
+
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
           {error}
@@ -84,7 +87,7 @@ export default function LoginForm() {
           {isLoading ? (
             <Loader2 className="h-5 w-5 animate-spin" />
           ) : (
-            'تسجيل الدخول'
+            "تسجيل الدخول"
           )}
         </button>
       </form>

@@ -1,5 +1,5 @@
 import { ApiCourse, Course } from "../types/course";
-import { getStoredTokens } from "./auth";
+import { getStoredTokens, removeTokens } from "./auth";
 
 const API_BASE_URL = "https://cms-app.org/";
 
@@ -17,6 +17,12 @@ export async function getCourses(page: number = 1): Promise<ApiCourse> {
       },
     }
   );
+
+  if (response.status === 401) {
+    removeTokens();
+    window.location.reload();
+    window.location.href = "/login";
+  }
 
   if (!response.ok) {
     throw new Error("Failed to fetch courses");

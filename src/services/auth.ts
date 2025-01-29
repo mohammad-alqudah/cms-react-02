@@ -8,6 +8,7 @@ export function getStoredTokens(): AuthTokens | null {
     const tokens = localStorage.getItem(TOKEN_KEY);
     return tokens ? JSON.parse(tokens) : null;
   } catch {
+    window.location.reload();
     return null;
   }
 }

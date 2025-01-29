@@ -1,4 +1,4 @@
-import { getStoredTokens } from "../auth";
+import { getStoredTokens, removeTokens } from "../auth";
 import type { StudentDetails, StudentCourse } from "../../types/student";
 import { mockStudentDetails, mockStudentCourses } from "./mockData";
 
@@ -18,6 +18,12 @@ export async function getStudents(page: number = 1): Promise<StudentDetails> {
       },
     }
   );
+
+  if (response.status === 401) {
+    removeTokens();
+    window.location.reload();
+    window.location.href = "/login";
+  }
 
   if (!response.ok) {
     throw new Error("Failed to fetch students");

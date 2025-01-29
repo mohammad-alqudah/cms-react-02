@@ -1,3 +1,5 @@
+import { removeTokens } from "./auth";
+
 const API_BASE_URL = "https://cms-app.org/";
 
 export async function get<T>(endpoint: string, token: string): Promise<T> {
@@ -6,6 +8,14 @@ export async function get<T>(endpoint: string, token: string): Promise<T> {
       Authorization: `Bearer ${token}`,
     },
   });
+
+  console.log("response", response);
+
+  if (response.status === 401) {
+    removeTokens();
+    window.location.reload();
+    window.location.href = "/login";
+  }
 
   if (!response.ok) {
     throw new Error(`API request failed: ${response.statusText}`);
@@ -23,10 +33,16 @@ export async function post<T>(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify(data),
   });
+
+  if (response.status === 401) {
+    removeTokens();
+    window.location.reload();
+    window.location.href = "/login";
+  }
 
   if (!response.ok) {
     throw new Error(`API request failed: ${response.statusText}`);

@@ -1,4 +1,4 @@
-import { getStoredTokens } from "../auth";
+import { getStoredTokens, removeTokens } from "../auth";
 import type {
   ApiDashboardStats,
   ApiDashboardMetrics,
@@ -21,6 +21,12 @@ export async function getDashboardStats(): Promise<{
       Authorization: `Bearer ${tokens.access}`,
     },
   });
+
+  if (response.status === 401) {
+    removeTokens();
+    window.location.reload();
+    window.location.href = "/login";
+  }
 
   if (!response.ok) {
     throw new Error("Failed to fetch dashboard statistics");
@@ -47,6 +53,12 @@ export async function getDashboardMetrics(): Promise<{
       },
     }
   );
+
+  if (response.status === 401) {
+    removeTokens();
+    window.location.reload();
+    window.location.href = "/login";
+  }
 
   if (!response.ok) {
     throw new Error("Failed to fetch dashboard metrics");
