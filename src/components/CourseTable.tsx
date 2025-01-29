@@ -48,6 +48,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
           endDate,
           courseTypeId
         );
+
         setCourses(response.data.map(mapApiCourseToModel));
         setTotalCount(response.count);
         setHasNext(!!response.next);
@@ -195,6 +196,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
             hasNext={hasNext}
             hasPrevious={hasPrevious}
             onPageChange={setCurrentPage}
+            count={totalCount}
           />
         </>
       )}
