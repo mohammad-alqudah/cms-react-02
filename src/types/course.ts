@@ -24,11 +24,15 @@ export interface Course {
   startDate: string;
   endDate: string;
   finishedAt: string | null;
+  finished_at: string | null;
   studentCount: number;
+  student_count: number;
   sessionsCount: number;
   attendanceRate: number;
   collectedAmount: number;
   expectedAmount: number;
   paymentRate: number;
   alert: string | null;
+  date: string;
+  end_date: string;
 }

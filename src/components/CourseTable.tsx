@@ -98,46 +98,46 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
     { label: "المدرب", field: "instructor" },
     {
       label: "تاريخ البدء",
-      field: "startDate",
-      render: (course: Course) => formatDate(course.startDate),
+      field: "date",
+      render: (course: Course) => formatDate(course.date),
     },
     {
       label: "تاريخ الانتهاء",
-      field: "endDate",
-      render: (course: Course) => formatDate(course.endDate),
+      field: "end_date",
+      render: (course: Course) => formatDate(course.end_date),
     },
     {
       label: "وقت الانتهاء الفعلي",
-      field: "finishedAt",
+      field: "finished_at",
       render: (course: Course) => formatDate(course.finishedAt),
     },
-    { label: "عدد الطلاب", field: "studentCount" },
-    { label: "عدد الحصص", field: "sessionsCount" },
+    { label: "عدد الطلاب", field: "number_of_students" },
+    { label: "عدد الحصص", field: "number_of_sessions" },
     {
       label: "نسبة الحضور",
-      field: "attendanceRate",
+      field: "attendance_percentage",
       render: (course: Course) => `${course.attendanceRate}%`,
     },
     {
       label: "المبلغ المحصل",
-      field: "collectedAmount",
+      field: "payment",
       render: (course: Course) => `${course.collectedAmount} دينار`,
     },
     {
       label: "المبلغ المتوقع",
-      field: "expectedAmount",
+      field: "payment_goal",
       render: (course: Course) => `${course.expectedAmount} دينار`,
     },
     {
       label: "نسبة التحصيل",
-      field: "paymentRate",
+      field: "payment_percentage",
       render: (course: Course) => `${course.paymentRate}%`,
     },
-    {
-      label: "الإعدادات",
-      field: "expectedAmount",
-      // render: (course: Course) => `test`,
-    },
+    // {
+    //   label: "الإعدادات",
+    //   field: "expected_amount",
+    //   // render: (course: Course) => `test`,
+    // },
   ];
 
   if (error) {
