@@ -47,26 +47,53 @@ export default function Pagination({
         <ChevronRight className="h-5 w-5" />
       </button>
 
-      {pages.map((page, index) => (
-        <React.Fragment key={page}>
-          {index === 0 && page > 1 && <span className="px-3 py-1">٠٠٠</span>}
-
+      {pages[0] > 1 && (
+        <>
           <button
-            onClick={() => onPageChange(page)}
+            onClick={() => onPageChange(1)}
             className={`px-3 py-1 rounded-lg ${
-              page === currentPage
+              1 === currentPage
                 ? "bg-[#67B37D] text-white"
                 : "hover:bg-gray-100"
             }`}
           >
-            {page}
+            1
           </button>
+          {pages[0] > 2 && <span className="px-3 py-1">٠٠٠</span>}
+        </>
+      )}
 
-          {index === pages.length - 1 && page < totalPages && (
+      {pages.map((page) => (
+        <button
+          key={page}
+          onClick={() => onPageChange(page)}
+          className={`px-3 py-1 rounded-lg ${
+            page === currentPage
+              ? "bg-[#67B37D] text-white"
+              : "hover:bg-gray-100"
+          }`}
+        >
+          {page}
+        </button>
+      ))}
+
+      {pages[pages.length - 1] < totalPages && (
+        <>
+          {pages[pages.length - 1] < totalPages - 1 && (
             <span className="px-3 py-1">٠٠٠</span>
           )}
-        </React.Fragment>
-      ))}
+          <button
+            onClick={() => onPageChange(totalPages)}
+            className={`px-3 py-1 rounded-lg ${
+              totalPages === currentPage
+                ? "bg-[#67B37D] text-white"
+                : "hover:bg-gray-100"
+            }`}
+          >
+            {totalPages}
+          </button>
+        </>
+      )}
 
       <button
         onClick={() => onPageChange(currentPage + 1)}
