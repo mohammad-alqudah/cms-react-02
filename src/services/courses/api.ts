@@ -12,7 +12,8 @@ export async function getCourses(
   search?: string,
   startDate?: string,
   endDate?: string,
-  courseType?: string
+  courseType?: string,
+  centerId?: string
 ): Promise<any> {
   const params = new URLSearchParams({
     page: page.toString(),
@@ -22,6 +23,7 @@ export async function getCourses(
     ...(startDate && { date: startDate }),
     ...(endDate && { end_date: endDate }),
     ...(courseType && { type: courseType }),
+    ...(centerId && { center: centerId }),
   });
 
   const tokens = getStoredTokens();
@@ -35,6 +37,17 @@ export async function getCourses(
   //     sort.field
   //   )}&order=${encodeURIComponent(sort.direction)}&${params.toString()}`;
   // }
+
+  return get<any>(endpoint, tokens.access);
+}
+
+export async function getCenters(): Promise<any> {
+  const tokens = getStoredTokens();
+  if (!tokens) {
+    throw new Error("No authentication tokens found");
+  }
+
+  let endpoint = `center/centers/`;
 
   return get<any>(endpoint, tokens.access);
 }

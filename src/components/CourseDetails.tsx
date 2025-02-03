@@ -25,6 +25,7 @@ export default function CourseDetails({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFinishing, setIsFinishing] = useState(false);
+  const permission = JSON.parse(localStorage.getItem("permission") || "");
 
   useEffect(() => {
     async function fetchStudents() {
@@ -85,7 +86,8 @@ export default function CourseDetails({
           <span>العودة إلى قائمة الدورات</span>
         </button>
 
-        {details.finished_at == null ? (
+        {permission.permission.__04__all_tajweed_data_access &&
+        details.finished_at == null ? (
           <button
             onClick={handleFinishCourse}
             disabled={isFinishing}

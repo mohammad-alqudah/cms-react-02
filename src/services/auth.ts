@@ -19,6 +19,7 @@ export function storeTokens(tokens: AuthTokens): void {
 
 export function removeTokens(): void {
   localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem("permission");
 }
 
 export function isAuthenticated(): boolean {

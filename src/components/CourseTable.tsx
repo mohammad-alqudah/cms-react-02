@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { Filter } from "lucide-react";
-import { getCourses, getCoursesType } from "../services/courses/api";
+import {
+  getCenters,
+  getCourses,
+  getCoursesType,
+} from "../services/courses/api";
 import { mapApiCourseToModel } from "../services/courses/mapper";
 import { formatDate } from "../utils/date";
 import type { Course } from "../types/course";
@@ -16,6 +20,7 @@ interface CourseTableProps {
 
 export default function CourseTable({ onCourseClick }: CourseTableProps) {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [centers, setCenters] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [hasNext, setHasNext] = useState(false);
@@ -28,6 +33,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
   const [endDate, setEndDate] = useState("");
   const [courseType, setCourseType] = useState<any>();
   const [courseTypeId, setCourseTypeId] = useState<any>();
+  const [centerId, setCenterId] = useState<any>();
   const [sort, setSort] = useState<{
     field: string;
     direction: "asc" | "desc" | null;
@@ -46,10 +52,14 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
           search,
           startDate,
           endDate,
-          courseTypeId
+          courseTypeId,
+          centerId
         );
 
+        const centers = await getCenters();
+
         setCourses(response.data.map(mapApiCourseToModel));
+        setCenters(centers.data);
         setTotalCount(response.count);
         setHasNext(!!response.next);
         setHasPrevious(!!response.previous);
@@ -64,7 +74,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
     }
 
     fetchFilteredCourses();
-  }, [currentPage, sort, search, startDate, endDate, courseTypeId]);
+  }, [currentPage, sort, search, startDate, endDate, courseTypeId, centerId]);
 
   useEffect(() => {
     async function fetchCoursesType() {
@@ -177,6 +187,8 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
         onEndDateChange={setEndDate}
         courseType={courseType}
         setCourseTypeId={setCourseTypeId}
+        centers={centers}
+        setCenterId={setCenterId}
       />
 
       {isLoading ? (
