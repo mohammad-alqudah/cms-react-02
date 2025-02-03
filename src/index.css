@@ -6,4 +6,9 @@
   html {
     direction: rtl;
   }
+
+  #react-confirm-alert .react-confirm-alert .react-confirm-alert-body {
+    text-align: right !important;
+    direction: rtl !important;
+  }
 }

@@ -7,6 +7,7 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { finishCourse, getCourseStudents } from "../services/courses/api";
 import Card from "./ui/Card";
 import CourseStudentsTable from "./course/CourseStudentsTable";
+import { confirmAlert } from "react-confirm-alert";
 // import { mapApiCourseToModel } from "../services/courses";
 
 interface CourseDetailsProps {
@@ -45,15 +46,32 @@ export default function CourseDetails({
   }, [details.id]);
 
   const handleFinishCourse = async () => {
-    try {
-      setIsFinishing(true);
-      await finishCourse(details.id);
-      onCourseFinished?.();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to finish course");
-    } finally {
-      setIsFinishing(false);
-    }
+    confirmAlert({
+      title: "هل انت متاكد؟",
+      message: "هل انت متاكد انك تريد انهاء االدورة؟",
+      buttons: [
+        {
+          label: "نعم اريد",
+          onClick: async () => {
+            try {
+              setIsFinishing(true);
+              await finishCourse(details.id);
+              onCourseFinished?.();
+            } catch (err) {
+              setError(
+                err instanceof Error ? err.message : "Failed to finish course"
+              );
+            } finally {
+              setIsFinishing(false);
+            }
+          },
+        },
+        {
+          label: "لا اريد الإنهاء",
+          onClick: () => console.log("Click No"),
+        },
+      ],
+    });
   };
 
   return (
