@@ -35,4 +35,5 @@ export interface Course {
   alert: string | null;
   date: string;
   end_date: string;
+  center: string;
 }

@@ -12,7 +12,6 @@ import TableFilters from "./table/TableFilters";
 import DataTable from "./table/DataTable";
 import Pagination from "./Pagination";
 import Card from "./ui/Card";
-// import ReactTable from "./ReactTable";
 
 interface CourseTableProps {
   onCourseClick: (courseId: string) => void;
@@ -145,9 +144,9 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
       render: (course: Course) => `${course.paymentRate}%`,
     },
     // {
-    //   label: "الإعدادات",
-    //   field: "expected_amount",
-    //   // render: (course: Course) => `test`,
+    //   label: " المراكز",
+    //   field: "center",
+    //   render: (course: Course) => `${course.center}---`,
     // },
   ];
 
