@@ -143,11 +143,11 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
       field: "payment_percentage",
       render: (course: Course) => `${course.paymentRate}%`,
     },
-    // {
-    //   label: " المراكز",
-    //   field: "center",
-    //   render: (course: Course) => `${course.center}---`,
-    // },
+    {
+      label: " المراكز",
+      field: "center",
+      // render: (course: Course) => `${course.center}---`,
+    },
   ];
 
   if (error) {
