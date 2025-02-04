@@ -7,7 +7,7 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { finishCourse, getCourseStudents } from "../services/courses/api";
 import Card from "./ui/Card";
 import CourseStudentsTable from "./course/CourseStudentsTable";
-import { confirmAlert } from "react-confirm-alert";
+// import { confirmAlert } from "react-confirm-alert";
 // import { mapApiCourseToModel } from "../services/courses";
 
 interface CourseDetailsProps {
@@ -25,6 +25,7 @@ export default function CourseDetails({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFinishing, setIsFinishing] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const permission = JSON.parse(localStorage.getItem("permission") || "");
 
   useEffect(() => {
@@ -47,32 +48,16 @@ export default function CourseDetails({
   }, [details.id]);
 
   const handleFinishCourse = async () => {
-    confirmAlert({
-      title: "هل انت متاكد؟",
-      message: "هل انت متاكد انك تريد انهاء االدورة؟",
-      buttons: [
-        {
-          label: "نعم اريد",
-          onClick: async () => {
-            try {
-              setIsFinishing(true);
-              await finishCourse(details.id);
-              onCourseFinished?.();
-            } catch (err) {
-              setError(
-                err instanceof Error ? err.message : "Failed to finish course"
-              );
-            } finally {
-              setIsFinishing(false);
-            }
-          },
-        },
-        {
-          label: "لا اريد الإنهاء",
-          onClick: () => console.log("Click No"),
-        },
-      ],
-    });
+    try {
+      setIsFinishing(true);
+      await finishCourse(details.id);
+      setShowConfirmDialog(false);
+      onCourseFinished?.();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to finish course");
+    } finally {
+      setIsFinishing(false);
+    }
   };
 
   return (
@@ -89,7 +74,7 @@ export default function CourseDetails({
         {permission.permission.__04__all_tajweed_data_access &&
         details.finished_at == null ? (
           <button
-            onClick={handleFinishCourse}
+            onClick={() => setShowConfirmDialog(true)}
             disabled={isFinishing}
             className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -103,6 +88,55 @@ export default function CourseDetails({
           ""
         )}
       </div>
+
+      {showConfirmDialog && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div
+              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              onClick={() => setShowConfirmDialog(false)}
+            />
+
+            <div className="relative transform overflow-hidden rounded-lg bg-white text-right shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+              <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-start">
+                  <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-right">
+                    <h3 className="text-xl font-semibold leading-6 text-gray-900 mb-4">
+                      تأكيد إنهاء الدورة
+                    </h3>
+                    <div className="mt-2">
+                      <p className="text-base text-gray-600">
+                        هل أنت متأكد من رغبتك في إنهاء الدورة؟ لا يمكن التراجع
+                        عن هذا الإجراء.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 gap-3">
+                <button
+                  type="button"
+                  onClick={handleFinishCourse}
+                  disabled={isFinishing}
+                  className="inline-flex w-full justify-center rounded-lg bg-red-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-600 sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isFinishing ? (
+                    <Loader2 className="h-4 w-4 animate-spin ml-2" />
+                  ) : null}
+                  تأكيد الإنهاء
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmDialog(false)}
+                  className="mt-3 inline-flex w-full justify-center rounded-lg bg-white px-3 py-2 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                >
+                  إلغاء
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Card>
         <div className="space-y-6">
