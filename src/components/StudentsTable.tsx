@@ -4,6 +4,7 @@ import {
   getStudents,
   getStudentDetails,
   getStudentCourses,
+  downloadExcelFile,
 } from "../services/students/api";
 import { mapApiStudentToModel } from "../services/students/mapper";
 import type { StudentDetails, StudentCourse } from "../types/student";
@@ -130,6 +131,15 @@ export default function StudentsTable() {
           <Filter className="h-4 w-4" />
           {showFilters ? "إخفاء الفلترة" : "إظهار الفلترة"}
         </button> */}
+
+        <div>
+          <button
+            onClick={() => downloadExcelFile()}
+            className="bg-green-100 py-2 px-4 rounded-lg text-green-700 font-medium hover:bg-green-200 transition-colors"
+          >
+            Download Excel
+          </button>
+        </div>
       </div>
 
       {/* <TableFilters
@@ -151,12 +161,14 @@ export default function StudentsTable() {
             columns={columns}
             data={students}
             onRowClick={handleStudentClick}
+            storageKeyName="students-table-columns"
           />
           <Pagination
             currentPage={currentPage}
             hasNext={hasNext}
             hasPrevious={hasPrevious}
             onPageChange={setCurrentPage}
+            count={totalCount}
           />
         </>
       )}

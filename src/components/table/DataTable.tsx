@@ -24,9 +24,8 @@ interface DataTableProps {
   onRowClick?: (id: string) => void;
   sort?: Sort;
   onSort?: (field: string) => void;
+  storageKeyName: string;
 }
-
-const STORAGE_KEY = "table_visible_columns";
 
 export default function DataTable({
   columns,
@@ -34,7 +33,9 @@ export default function DataTable({
   onRowClick,
   sort = { field: "", direction: null },
   onSort,
+  storageKeyName,
 }: DataTableProps) {
+  const STORAGE_KEY = storageKeyName;
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(() => {
     const savedColumns = localStorage.getItem(STORAGE_KEY);
     if (savedColumns) {
@@ -102,13 +103,15 @@ export default function DataTable({
     <>
       <div className="mb-4 flex justify-end">
         <div className="relative">
-          <button
-            onClick={() => setShowColumnSelector(!showColumnSelector)}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#67B37D]"
-          >
-            <Settings2 className="h-4 w-4" />
-            <span>إعدادات الأعمدة</span>
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setShowColumnSelector(!showColumnSelector)}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#67B37D]"
+            >
+              <Settings2 className="h-4 w-4" />
+              <span>إعدادات الأعمدة</span>
+            </button>
+          </div>
 
           {showColumnSelector && (
             <div className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">

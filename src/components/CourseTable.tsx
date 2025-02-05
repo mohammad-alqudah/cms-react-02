@@ -200,6 +200,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
             onRowClick={onCourseClick}
             sort={sort}
             onSort={handleSort}
+            storageKeyName="course-table-columns"
           />
           {/* <ReactTable /> */}
           <Pagination

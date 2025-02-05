@@ -32,6 +32,42 @@ export async function getStudents(page: number = 1): Promise<StudentDetails> {
   return response.json();
 }
 
+export async function downloadExcelFile(): Promise<any> {
+  const tokens = getStoredTokens();
+  if (!tokens) {
+    throw new Error("No authentication tokens found");
+  }
+
+  const response = await fetch(
+    `${API_BASE_URL}tajweed/dashboard/students/?data-type=excel`,
+    {
+      headers: {
+        Authorization: `Bearer ${tokens.access}`,
+      },
+    }
+  );
+
+  if (response.status === 401) {
+    removeTokens();
+    window.location.reload();
+    window.location.href = "/login";
+  }
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch students");
+  }
+
+  const blob = await response.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "students.xlsx";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.URL.revokeObjectURL(url);
+}
+
 export async function getStudentDetails(
   studentId: string
 ): Promise<{ data: StudentDetails; status: boolean; error: null }> {
