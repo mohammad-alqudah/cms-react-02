@@ -18,6 +18,7 @@ interface CourseTableProps {
 }
 
 export default function CourseTable({ onCourseClick }: CourseTableProps) {
+  const filterDefaults = JSON.parse(localStorage.getItem("filterData") || "{}");
   const [courses, setCourses] = useState<Course[]>([]);
   const [centers, setCenters] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,13 +27,17 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
   const [hasPrevious, setHasPrevious] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
-  const [search, setSearch] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [showFilters, setShowFilters] = useState(
+    filterDefaults.showFilters || false
+  );
+  const [search, setSearch] = useState(filterDefaults.search || "");
+  const [startDate, setStartDate] = useState(filterDefaults.startDate || "");
+  const [endDate, setEndDate] = useState(filterDefaults.endDate || "");
   const [courseType, setCourseType] = useState<any>();
-  const [courseTypeId, setCourseTypeId] = useState<any>();
-  const [centerId, setCenterId] = useState<any>();
+  const [courseTypeId, setCourseTypeId] = useState<any>(
+    filterDefaults.courseTypeId || ""
+  );
+  const [centerId, setCenterId] = useState<any>(filterDefaults.centerId || "");
   const [sort, setSort] = useState<{
     field: string;
     direction: "asc" | "desc" | null;
@@ -93,6 +98,27 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
     }
 
     fetchCoursesType();
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "filterData",
+      JSON.stringify({
+        save: true,
+        showFilters,
+        search,
+        centerId,
+        courseTypeId,
+        startDate,
+        endDate,
+      })
+    );
+  }, [showFilters, search, courseTypeId, centerId, startDate, endDate]);
+
+  useEffect(() => {
+    localStorage.setItem("filterData", JSON.stringify({ save: false }));
+
+    if (!filterDefaults.save) localStorage.removeItem("filterData");
   }, []);
 
   const handleSort = (field: string) => {
@@ -185,8 +211,10 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
         onStartDateChange={setStartDate}
         onEndDateChange={setEndDate}
         courseType={courseType}
+        courseTypeId={courseTypeId}
         setCourseTypeId={setCourseTypeId}
         centers={centers}
+        centerId={centerId}
         setCenterId={setCenterId}
       />
 

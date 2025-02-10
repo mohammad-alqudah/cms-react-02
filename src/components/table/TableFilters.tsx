@@ -10,8 +10,10 @@ interface TableFiltersProps {
   onStartDateChange: (value: string) => void;
   onEndDateChange: (value: string) => void;
   courseType: any[];
+  courseTypeId: string;
   setCourseTypeId: (value: string) => void;
   centers: any[];
+  centerId: string;
   setCenterId: (value: string) => void;
 }
 
@@ -24,8 +26,10 @@ export default function TableFilters({
   onStartDateChange,
   onEndDateChange,
   courseType,
+  courseTypeId,
   setCourseTypeId,
   centers,
+  centerId,
   setCenterId,
 }: TableFiltersProps) {
   if (!show) return null;
@@ -58,12 +62,20 @@ export default function TableFilters({
               setCourseTypeId(e.target.value);
             }}
           >
-            <option value="" defaultChecked>
+            <option
+              value=""
+              defaultChecked
+              selected={courseTypeId == "" ? true : false}
+            >
               اختر
             </option>
-            {courseType.map((type: any, idx) => (
+            {courseType?.map((type: any, idx) => (
               <>
-                <option key={idx} value={type.id}>
+                <option
+                  selected={courseTypeId == type.id ? true : false}
+                  key={idx}
+                  value={type.id}
+                >
                   {type.name}
                 </option>
               </>
@@ -84,12 +96,20 @@ export default function TableFilters({
                 setCenterId(e.target.value);
               }}
             >
-              <option value="" defaultChecked>
+              <option
+                value=""
+                defaultChecked
+                selected={centerId == "" ? true : false}
+              >
                 اختر
               </option>
               {centers.map((center: any, idx) => (
                 <>
-                  <option key={idx} value={center.id}>
+                  <option
+                    key={idx}
+                    value={center.id}
+                    selected={centerId == center.id ? true : false}
+                  >
                     {center.name}
                   </option>
                 </>
