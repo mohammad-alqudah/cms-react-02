@@ -33,6 +33,8 @@ export function mapApiCourseToModel(apiCourse: ApiCourse): Course {
     payment_percentage: apiCourse.payment_percentage || 0,
     alert: apiCourse.alert,
     center: apiCourse.center,
+    mode_of_instruction: apiCourse.mode_of_instruction,
+    modeOfInstruction: apiCourse.mode_of_instruction,
   };
 }
 

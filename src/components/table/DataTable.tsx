@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 interface Column {
   label: string;
   field: string;
+  render?: (row: any) => any;
 }
 
 interface Sort {
@@ -189,9 +190,10 @@ export default function DataTable({
                           <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
                         </Tooltip>
                       )}
-                      {typeof row[field] === "number" &&
-                      field.toLowerCase().includes("rate")
-                        ? `${row[field]}%`
+                      {columns.find((col) => col.field === field)?.render
+                        ? columns.find((col) => col.field === field)!.render!(
+                            row
+                          )
                         : row[field]}
                     </div>
                   </td>

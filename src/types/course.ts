@@ -36,4 +36,5 @@ export interface Course {
   date: string;
   end_date: string;
   center: string;
+  mode_of_instruction: string;
 }

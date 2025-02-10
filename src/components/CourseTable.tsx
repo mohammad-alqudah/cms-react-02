@@ -38,6 +38,9 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
     filterDefaults.courseTypeId || ""
   );
   const [centerId, setCenterId] = useState<any>(filterDefaults.centerId || "");
+  const [modeOfInstructionId, setModeOfInstructionId] = useState<any>(
+    filterDefaults.modeOfInstructionId || ""
+  );
   const [sort, setSort] = useState<{
     field: string;
     direction: "asc" | "desc" | null;
@@ -57,7 +60,8 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
           startDate,
           endDate,
           courseTypeId,
-          centerId
+          centerId,
+          modeOfInstructionId
         );
 
         const centers = await getCenters();
@@ -78,7 +82,16 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
     }
 
     fetchFilteredCourses();
-  }, [currentPage, sort, search, startDate, endDate, courseTypeId, centerId]);
+  }, [
+    currentPage,
+    sort,
+    search,
+    startDate,
+    endDate,
+    courseTypeId,
+    centerId,
+    modeOfInstructionId,
+  ]);
 
   useEffect(() => {
     async function fetchCoursesType() {
@@ -111,9 +124,18 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
         courseTypeId,
         startDate,
         endDate,
+        modeOfInstructionId,
       })
     );
-  }, [showFilters, search, courseTypeId, centerId, startDate, endDate]);
+  }, [
+    showFilters,
+    search,
+    courseTypeId,
+    centerId,
+    startDate,
+    endDate,
+    modeOfInstructionId,
+  ]);
 
   useEffect(() => {
     localStorage.setItem("filterData", JSON.stringify({ save: false }));
@@ -174,6 +196,12 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
       field: "center",
       // render: (course: Course) => `${course.center}---`,
     },
+    {
+      label: "طريقة التدريس",
+      field: "mode_of_instruction",
+      render: (course: Course) =>
+        `${course.mode_of_instruction === "face_to_face" ? "وجاهي" : "عن بعد"}`,
+    },
   ];
 
   if (error) {
@@ -216,6 +244,8 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
         centers={centers}
         centerId={centerId}
         setCenterId={setCenterId}
+        modeOfInstructionId={modeOfInstructionId}
+        setModeOfInstructionId={setModeOfInstructionId}
       />
 
       {isLoading ? (

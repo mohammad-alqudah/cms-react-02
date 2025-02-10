@@ -15,6 +15,8 @@ interface TableFiltersProps {
   centers: any[];
   centerId: string;
   setCenterId: (value: string) => void;
+  modeOfInstructionId: string;
+  setModeOfInstructionId: (value: string) => void;
 }
 
 export default function TableFilters({
@@ -31,6 +33,8 @@ export default function TableFilters({
   centers,
   centerId,
   setCenterId,
+  modeOfInstructionId,
+  setModeOfInstructionId,
 }: TableFiltersProps) {
   if (!show) return null;
 
@@ -38,8 +42,8 @@ export default function TableFilters({
 
   return (
     <div className="bg-gray-50 p-4 rounded-lg mb-6 space-y-4 flex flex-col">
-      <div className="w-full flex gap-2">
-        <div className="relative w-1/2">
+      <div className="w-full md:flex-nowrap flex flex-wrap gap-2">
+        <div className="relative md:w-1/2 w-full">
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
           <input
             type="text"
@@ -50,7 +54,7 @@ export default function TableFilters({
           />
         </div>
 
-        <div className="relative w-1/2">
+        <div className="relative  md:w-1/2 w-full">
           <label className="absolute -top-2 right-3 bg-white px-2 text-xs font-medium text-gray-600">
             الدورات
           </label>
@@ -83,8 +87,41 @@ export default function TableFilters({
           </select>
         </div>
 
+        <div className="relative  md:w-1/2 w-full">
+          <label className="absolute -top-2 right-3 bg-white px-2 text-xs font-medium text-gray-600">
+            طريقة التدريس
+          </label>
+          <select
+            name="course_type"
+            id="course_type"
+            className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#67B37D] focus:border-transparent"
+            onChange={(e) => {
+              setModeOfInstructionId(e.target.value);
+            }}
+          >
+            <option
+              value=""
+              defaultChecked
+              selected={modeOfInstructionId == "" ? true : false}
+            >
+              اختر
+            </option>
+            {["face_to_face", "online"]?.map((type: any, idx) => (
+              <>
+                <option
+                  selected={modeOfInstructionId == type ? true : false}
+                  key={idx}
+                  value={type}
+                >
+                  {type === "face_to_face" ? "وجاهي" : "عن بعد"}
+                </option>
+              </>
+            ))}
+          </select>
+        </div>
+
         {permission.permission.__04__all_tajweed_data_access && (
-          <div className="relative w-1/2">
+          <div className="relative  md:w-1/2 w-full">
             <label className="absolute -top-2 right-3 bg-white px-2 text-xs font-medium text-gray-600">
               المراكز
             </label>
