@@ -41,6 +41,9 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
   const [modeOfInstructionId, setModeOfInstructionId] = useState<any>(
     filterDefaults.modeOfInstructionId || ""
   );
+  const [isFinished, setIsFinished] = useState<any>(
+    filterDefaults.isFinished || false
+  );
   const [sort, setSort] = useState<{
     field: string;
     direction: "asc" | "desc" | null;
@@ -61,7 +64,8 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
           endDate,
           courseTypeId,
           centerId,
-          modeOfInstructionId
+          modeOfInstructionId,
+          isFinished
         );
 
         setCourses(response.data.map(mapApiCourseToModel));
@@ -88,6 +92,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
     courseTypeId,
     centerId,
     modeOfInstructionId,
+    isFinished,
   ]);
 
   useEffect(() => {
@@ -125,6 +130,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
         startDate,
         endDate,
         modeOfInstructionId,
+        isFinished,
       })
     );
   }, [
@@ -135,6 +141,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
     startDate,
     endDate,
     modeOfInstructionId,
+    isFinished,
   ]);
 
   useEffect(() => {
@@ -246,6 +253,8 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
         setCenterId={setCenterId}
         modeOfInstructionId={modeOfInstructionId}
         setModeOfInstructionId={setModeOfInstructionId}
+        isFinished={isFinished}
+        setIsFinished={setIsFinished}
       />
 
       {isLoading ? (

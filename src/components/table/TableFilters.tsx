@@ -17,6 +17,8 @@ interface TableFiltersProps {
   setCenterId: (value: string) => void;
   modeOfInstructionId: string;
   setModeOfInstructionId: (value: string) => void;
+  isFinished: string;
+  setIsFinished: (value: string) => void;
 }
 
 export default function TableFilters({
@@ -35,6 +37,8 @@ export default function TableFilters({
   setCenterId,
   modeOfInstructionId,
   setModeOfInstructionId,
+  isFinished,
+  setIsFinished,
 }: TableFiltersProps) {
   if (!show) return null;
 
@@ -163,6 +167,8 @@ export default function TableFilters({
         onEndDateChange={onEndDateChange}
         startLabel="من تاريخ"
         endLabel="إلى تاريخ"
+        isFinished={isFinished}
+        setIsFinished={setIsFinished}
       />
     </div>
   );

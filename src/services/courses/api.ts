@@ -14,7 +14,8 @@ export async function getCourses(
   endDate?: string,
   courseType?: string,
   centerId?: string,
-  modeOfInstructionId?: string
+  modeOfInstructionId?: string,
+  isFinished?: string
 ): Promise<any> {
   const params = new URLSearchParams({
     page: page.toString(),
@@ -26,6 +27,7 @@ export async function getCourses(
     ...(courseType && { type: courseType }),
     ...(centerId && { center: centerId }),
     ...(modeOfInstructionId && { mode_of_instruction: modeOfInstructionId }),
+    ...(isFinished && { is_finished: isFinished }),
   });
 
   const tokens = getStoredTokens();
