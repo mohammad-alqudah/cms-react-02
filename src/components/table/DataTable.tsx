@@ -88,9 +88,8 @@ export default function DataTable({
             <div key={field} className="flex justify-between items-center py-1">
               <span className="text-sm font-medium text-gray-500">{label}</span>
               <span className="text-sm text-gray-900">
-                {typeof row[field] === "number" &&
-                field.toLowerCase().includes("rate")
-                  ? `${row[field]}%`
+                {columns.find((col) => col.field === field)?.render
+                  ? columns.find((col) => col.field === field)!.render!(row)
                   : row[field]}
               </span>
             </div>
