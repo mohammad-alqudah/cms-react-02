@@ -64,10 +64,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
           modeOfInstructionId
         );
 
-        const centers = await getCenters();
-
         setCourses(response.data.map(mapApiCourseToModel));
-        setCenters(centers.data);
         setTotalCount(response.count);
         setHasNext(!!response.next);
         setHasPrevious(!!response.previous);
@@ -99,6 +96,9 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
         setIsLoading(true);
         const response = await getCoursesType();
         setCourseType(response.data.map(mapApiCourseToModel));
+
+        const centers = await getCenters();
+        setCenters(centers.data);
 
         setError(null);
       } catch (err) {
