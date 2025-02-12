@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Book, Users, BarChart, X, LogOut } from "lucide-react";
+import { Book, Users, BarChart, X, LogOut, Package2 } from "lucide-react";
 import { removeTokens } from "../services/auth";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -77,6 +77,21 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             <BarChart className="h-5 w-5 ml-3" />
             <span className="font-medium">احصائيات</span>
           </button> */}
+
+          <button
+            onClick={() => {
+              navigate("/inventory");
+              onClose();
+            }}
+            className={`flex items-center w-full px-4 py-2 text-gray-700 rounded-lg ${
+              getActivePath("/inventory")
+                ? "bg-[#67B37D]/10 text-[#67B37D]"
+                : "hover:bg-gray-100"
+            }`}
+          >
+            <Package2 className="h-5 w-5 ml-3" />
+            <span className="font-medium">المخزون</span>
+          </button>
         </div>
 
         <div className="px-4 pb-6">
