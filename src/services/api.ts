@@ -9,8 +9,6 @@ export async function get<T>(endpoint: string, token: string): Promise<T> {
     },
   });
 
-  console.log("response", response);
-
   if (response.status === 401) {
     removeTokens();
     window.location.reload();

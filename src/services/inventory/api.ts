@@ -16,24 +16,47 @@ export interface ApiInventoryItem {
     };
   };
   image: string;
+  center: {
+    id: number;
+    name: string;
+  };
 }
 
 export interface ApiInventoryResponse {
-  data: {
-    items: ApiInventoryItem[];
-    count: number;
-  };
+  data: ApiInventoryItem[];
+  count: number;
   status: boolean;
   error: null;
+  next: string | null;
+  previous: string | null;
 }
 
-export async function getInventoryItems(): Promise<ApiInventoryResponse> {
+export async function getInventoryItems(
+  page: number = 1,
+  sort?: { field: string; direction: "asc" | "desc" | null },
+  search?: string,
+  selectedCategory?: string,
+  selectedSubcategory?: string,
+  selectedCenter?: string
+): Promise<ApiInventoryResponse> {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    ...(sort?.field && { sort: `${sort.field}` }),
+    ...(sort?.direction && { order: `${sort.direction}` }),
+    ...(search && { search }),
+    ...(selectedCategory && { category: selectedCategory }),
+    ...(selectedSubcategory && { subcategory: selectedSubcategory }),
+    ...(selectedCenter && { center: selectedCenter }),
+  });
+
   const tokens = getStoredTokens();
   if (!tokens) {
     throw new Error("No authentication tokens found");
   }
 
-  return get("inventory/items/", tokens.access);
+  let endpoint = `inventory/v2/items/?${params.toString()}`;
+
+  return get(endpoint, tokens.access);
 }
 
 export async function getCategories(): Promise<{

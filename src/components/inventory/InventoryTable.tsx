@@ -2,14 +2,18 @@ import { useState, useEffect } from "react";
 import { Filter } from "lucide-react";
 import Card from "../ui/Card";
 import InventoryFilters from "./InventoryFilters";
-import InventoryGrid from "./InventoryGrid";
 import { getInventoryItems } from "../../services/inventory/api";
 import type { InventoryItem } from "../../types/inventory";
 import { mapApiInventoryItemToModel } from "../../services/inventory/mapper";
+import Pagination from "../Pagination";
+import DataTable from "../table/DataTable";
 
 export default function InventoryTable() {
-  const [items, setItems] = useState<InventoryItem[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [hasNext, setHasNext] = useState(false);
+  const [hasPrevious, setHasPrevious] = useState(false);
+  const [items, setItems] = useState<InventoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -25,14 +29,33 @@ export default function InventoryTable() {
     direction: null,
   });
 
+  const handleSort = (field: string) => {
+    setSort((prev) => ({
+      field,
+      direction:
+        prev.field === field && prev.direction === "asc" ? "desc" : "asc",
+    }));
+  };
+
   useEffect(() => {
     async function fetchItems() {
       try {
         setIsLoading(true);
-        const response = await getInventoryItems();
-        const mappedItems = response.data.items.map(mapApiInventoryItemToModel);
+        const response = await getInventoryItems(
+          currentPage,
+          sort.direction ? sort : undefined,
+          search,
+          selectedCategory,
+          selectedSubcategory,
+          selectedCenter
+        );
+
+        const mappedItems = response.data.map(mapApiInventoryItemToModel);
         setItems(mappedItems);
-        setTotalCount(response.data.count);
+        setTotalCount(response.count);
+        setHasNext(!!response.next);
+        setHasPrevious(!!response.previous);
+        setError(null);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Failed to fetch inventory items"
@@ -43,44 +66,37 @@ export default function InventoryTable() {
     }
 
     fetchItems();
-  }, []);
+  }, [
+    currentPage,
+    search,
+    sort,
+    selectedCategory,
+    selectedSubcategory,
+    selectedCenter,
+  ]);
 
-  const handleSort = (field: string) => {
-    setSort((prev) => ({
-      field,
-      direction:
-        prev.field === field && prev.direction === "asc" ? "desc" : "asc",
-    }));
-  };
-
-  const sortedAndFilteredItems = [...items]
-    .filter((item) => {
-      const matchesSearch = item.name
-        .toLowerCase()
-        .includes(search.toLowerCase());
-      const matchesCategory =
-        !selectedCategory || item.category === selectedCategory;
-      const matchesSubcategory =
-        !selectedSubcategory || item.subcategory === selectedSubcategory;
-      const matchesCenter = !selectedCenter || item.center === selectedCenter;
-
-      return (
-        matchesSearch && matchesCategory && matchesSubcategory && matchesCenter
-      );
-    })
-    .sort((a, b) => {
-      if (!sort.field || !sort.direction) return 0;
-
-      const aValue: any = a[sort.field as keyof InventoryItem];
-      const bValue: any = b[sort.field as keyof InventoryItem];
-
-      if (sort.direction === "asc") {
-        if (aValue === undefined || bValue === undefined) return 0;
-        return aValue > bValue ? 1 : -1;
-      } else {
-        return aValue < bValue ? 1 : -1;
-      }
-    });
+  const columns = [
+    {
+      field: "image",
+      label: "الصورة",
+      render: (row: any) => (
+        <img
+          src={row.image}
+          alt="Product"
+          className="w-12 h-12 object-cover rounded-lg"
+        />
+      ),
+    },
+    { field: "name", label: "اسم العنصر" },
+    { field: "quantity", label: "الكمية" },
+    { field: "category", label: "التصنيف" },
+    { field: "subcategory", label: "التصنيف الفرعي" },
+    {
+      field: "center",
+      label: "المركز",
+      render: (row: any) => `${row.center}`,
+    },
+  ];
 
   if (error) {
     return (
@@ -123,11 +139,22 @@ export default function InventoryTable() {
       {isLoading ? (
         <div className="text-center py-8">جاري التحميل...</div>
       ) : (
-        <InventoryGrid
-          items={sortedAndFilteredItems}
-          sort={sort}
-          onSort={handleSort}
-        />
+        <>
+          <DataTable
+            columns={columns}
+            data={items}
+            sort={sort}
+            onSort={handleSort}
+            storageKeyName="inventoryTableColumns"
+          />
+          <Pagination
+            currentPage={currentPage}
+            hasNext={hasNext}
+            hasPrevious={hasPrevious}
+            onPageChange={setCurrentPage}
+            count={totalCount}
+          />
+        </>
       )}
     </Card>
   );

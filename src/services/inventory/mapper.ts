@@ -11,7 +11,7 @@ export function mapApiInventoryItemToModel(
     quantity: apiItem.current_quantity,
     category: apiItem.subcategory.category.name,
     subcategory: apiItem.subcategory.name,
-    center: "-", // Center information not available in API response
+    center: apiItem.center.name,
     lastUpdated: new Date().toISOString(), // Last updated information not available in API response
   };
 }

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   ArrowUpDown,
   ChevronUp,
@@ -6,7 +7,7 @@ import {
   Settings2,
 } from "lucide-react";
 import Tooltip from "../ui/Tooltip";
-import { useEffect, useState } from "react";
+import ImageModal from "../ui/ImageModal";
 
 interface Column {
   label: string;
@@ -45,8 +46,11 @@ export default function DataTable({
     return new Set(columns.map((col) => col.field));
   });
   const [showColumnSelector, setShowColumnSelector] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<{
+    url: string;
+    alt: string;
+  } | null>(null);
 
-  // Save to localStorage whenever visibleColumns changes
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify([...visibleColumns]));
   }, [visibleColumns]);
@@ -54,7 +58,6 @@ export default function DataTable({
   const toggleColumn = (field: string) => {
     const newVisibleColumns = new Set(visibleColumns);
     if (newVisibleColumns.has(field)) {
-      // Prevent hiding all columns
       if (newVisibleColumns.size > 1) {
         newVisibleColumns.delete(field);
       }
@@ -88,9 +91,23 @@ export default function DataTable({
             <div key={field} className="flex justify-between items-center py-1">
               <span className="text-sm font-medium text-gray-500">{label}</span>
               <span className="text-sm text-gray-900">
-                {columns.find((col) => col.field === field)?.render
-                  ? columns.find((col) => col.field === field)!.render!(row)
-                  : row[field]}
+                {field === "image" && (
+                  <img
+                    src={row[field]}
+                    alt="Product"
+                    className="w-12 h-12 object-cover rounded-lg cursor-pointer"
+                    onClick={() => {
+                      setSelectedImage({
+                        url: row.image,
+                        alt: row.name,
+                      });
+                    }}
+                  />
+                )}
+                {field !== "image" &&
+                  (columns.find((col) => col.field === field)?.render
+                    ? columns.find((col) => col.field === field)!.render!(row)
+                    : row[field])}
               </span>
             </div>
           ))}
@@ -189,11 +206,25 @@ export default function DataTable({
                           <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
                         </Tooltip>
                       )}
-                      {columns.find((col) => col.field === field)?.render
-                        ? columns.find((col) => col.field === field)!.render!(
-                            row
-                          )
-                        : row[field]}
+                      {field === "image" && (
+                        <img
+                          src={row[field]}
+                          alt="Product"
+                          className="w-12 h-12 object-cover rounded-lg cursor-pointer"
+                          onClick={() => {
+                            setSelectedImage({
+                              url: row.image,
+                              alt: row.name,
+                            });
+                          }}
+                        />
+                      )}
+                      {field !== "image" &&
+                        (columns.find((col) => col.field === field)?.render
+                          ? columns.find((col) => col.field === field)!.render!(
+                              row
+                            )
+                          : row[field])}
                     </div>
                   </td>
                 ))}
@@ -202,6 +233,14 @@ export default function DataTable({
           </tbody>
         </table>
       </div>
+
+      {selectedImage && (
+        <ImageModal
+          imageUrl={selectedImage.url}
+          alt={selectedImage.alt}
+          onClose={() => setSelectedImage(null)}
+        />
+      )}
     </>
   );
 

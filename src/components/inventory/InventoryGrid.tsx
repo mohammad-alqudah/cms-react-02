@@ -12,8 +12,8 @@ import ImageModal from "../ui/ImageModal";
 
 interface InventoryGridProps {
   items: InventoryItem[];
-  sort: { field: string; direction: "asc" | "desc" | null };
-  onSort: (field: string) => void;
+  // sort: { field: string; direction: "asc" | "desc" | null };
+  // onSort: (field: string) => void;
 }
 
 const STORAGE_KEY = "inventory_visible_columns";
@@ -34,9 +34,9 @@ const columns: Column[] = [
 
 export default function InventoryGrid({
   items,
-  sort,
-  onSort,
-}: InventoryGridProps) {
+}: // sort,
+// onSort,
+InventoryGridProps) {
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(() => {
     const savedColumns = localStorage.getItem(STORAGE_KEY);
     if (savedColumns) {
