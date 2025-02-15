@@ -8,11 +8,12 @@ import {
 } from "../services/students/api";
 import { mapApiStudentToModel } from "../services/students/mapper";
 import type { StudentDetails, StudentCourse } from "../types/student";
-import TableFilters from "./table/TableFilters";
 import DataTable from "./table/DataTable";
 import Pagination from "./Pagination";
 import StudentDetailsView from "./student/StudentDetailsView";
 import Card from "./ui/Card";
+import StudentTableFilters from "./student/StudentTableFilters";
+import { getCenters } from "../services/courses/api";
 
 export default function StudentsTable() {
   const [students, setStudents] = useState<StudentDetails[]>([]);
@@ -26,6 +27,17 @@ export default function StudentsTable() {
   const [search, setSearch] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [gender, setGender] = useState("");
+  const [centerId, setCenterId] = useState<any>("");
+  const [centers, setCenters] = useState<any[]>([]);
+
+  const [sort, setSort] = useState<{
+    field: string;
+    direction: "asc" | "desc" | null;
+  }>({
+    field: "",
+    direction: null,
+  });
 
   // New state for student details
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(
@@ -38,10 +50,39 @@ export default function StudentsTable() {
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
   useEffect(() => {
+    async function fetchCenters() {
+      try {
+        setIsLoading(true);
+
+        const centers = await getCenters();
+        setCenters(centers.data);
+
+        setError(null);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch courses"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchCenters();
+  }, []);
+
+  useEffect(() => {
     async function fetchStudents() {
       try {
         setIsLoading(true);
-        const response = await getStudents(currentPage);
+        const response = await getStudents(
+          currentPage,
+          sort.direction ? sort : undefined,
+          search,
+          startDate,
+          endDate,
+          gender,
+          centerId
+        );
 
         setStudents(response.data.map(mapApiStudentToModel));
         setTotalCount(Number(response.count));
@@ -58,7 +99,7 @@ export default function StudentsTable() {
     }
 
     fetchStudents();
-  }, [currentPage]);
+  }, [currentPage, sort, search, centerId, startDate, endDate, gender]);
 
   const handleStudentClick = async (studentId: string) => {
     try {
@@ -86,6 +127,14 @@ export default function StudentsTable() {
     setSelectedStudentId(null);
     setSelectedStudent(null);
     setStudentCourses([]);
+  };
+
+  const handleSort = (field: string) => {
+    setSort((prev) => ({
+      field,
+      direction:
+        prev.field === field && prev.direction === "asc" ? "desc" : "asc",
+    }));
   };
 
   const columns = [
@@ -124,25 +173,25 @@ export default function StudentsTable() {
             إجمالي عدد الطلاب: {totalCount}
           </p>
         </div>
-        {/* <button
+        <button
           onClick={() => setShowFilters(!showFilters)}
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#67B37D] hover:bg-[#67B37D]/10 rounded-lg transition-colors"
         >
           <Filter className="h-4 w-4" />
           {showFilters ? "إخفاء الفلترة" : "إظهار الفلترة"}
-        </button> */}
+        </button>
 
         <div>
           <button
             onClick={() => downloadExcelFile()}
             className="bg-green-100 py-2 px-4 rounded-lg text-green-700 font-medium hover:bg-green-200 transition-colors"
           >
-            Download Excel
+            تحميل ملف Excel
           </button>
         </div>
       </div>
 
-      {/* <TableFilters
+      <StudentTableFilters
         show={showFilters}
         search={search}
         onSearchChange={setSearch}
@@ -150,8 +199,14 @@ export default function StudentsTable() {
         endDate={endDate}
         onStartDateChange={setStartDate}
         onEndDateChange={setEndDate}
+        gender={gender}
+        setGender={setGender}
+        centerId={centerId}
+        setCenterId={setCenterId}
+        centers={centers}
+      />
 
-      /> */}
+      {/* اسم المركز ذكر وانثي العمر */}
 
       {isLoading || isLoadingDetails ? (
         <div className="text-center py-8">جاري التحميل...</div>
@@ -160,6 +215,7 @@ export default function StudentsTable() {
           <DataTable
             columns={columns}
             data={students}
+            onSort={handleSort}
             onRowClick={handleStudentClick}
             storageKeyName="students-table-columns"
           />

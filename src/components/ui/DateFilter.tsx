@@ -5,8 +5,8 @@ interface DateFilterProps {
   onEndDateChange: (value: string) => void;
   startLabel: string;
   endLabel: string;
-  isFinished: string;
-  setIsFinished: (value: string) => void;
+  isFinished?: string;
+  setIsFinished?: (value: string) => void;
 }
 
 export default function DateFilter({
@@ -58,38 +58,40 @@ export default function DateFilter({
             }}
           />
         </div> */}
-        <div className="relative  ">
-          <label className="absolute -top-2 right-3 bg-white px-2 text-xs font-medium text-gray-600">
-            الدورات
-          </label>
-          <select
-            name="course_type"
-            id="course_type"
-            className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#67B37D] focus:border-transparent"
-            onChange={(e) => {
-              setIsFinished(e.target.value);
-            }}
-          >
-            <option
-              value=""
-              defaultChecked
-              selected={isFinished == "" ? true : false}
+        {isFinished && (
+          <div className="relative  ">
+            <label className="absolute -top-2 right-3 bg-white px-2 text-xs font-medium text-gray-600">
+              الدورات
+            </label>
+            <select
+              name="course_type"
+              id="course_type"
+              className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#67B37D] focus:border-transparent"
+              onChange={(e) => {
+                setIsFinished && setIsFinished(e.target.value);
+              }}
             >
-              الكل
-            </option>
-            {["true", "false"]?.map((type: any, idx) => (
-              <>
-                <option
-                  selected={isFinished == type ? true : false}
-                  key={idx}
-                  value={type}
-                >
-                  {type === "true" ? "تم الانتهاء" : "غير مكتمل"}
-                </option>
-              </>
-            ))}
-          </select>
-        </div>
+              <option
+                value=""
+                defaultChecked
+                selected={isFinished == "" ? true : false}
+              >
+                الكل
+              </option>
+              {["true", "false"]?.map((type: any, idx) => (
+                <>
+                  <option
+                    selected={isFinished == type ? true : false}
+                    key={idx}
+                    value={type}
+                  >
+                    {type === "true" ? "تم الانتهاء" : "غير مكتمل"}
+                  </option>
+                </>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
     </div>
   );

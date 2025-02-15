@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Filter } from "lucide-react";
 import {
+  downloadCoursesExcelFile,
   getCenters,
   getCourses,
   getCoursesType,
@@ -228,6 +229,7 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
             إجمالي عدد الدورات: {totalCount}
           </p>
         </div>
+
         <button
           onClick={() => setShowFilters(!showFilters)}
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#67B37D] hover:bg-[#67B37D]/10 rounded-lg transition-colors"
@@ -235,6 +237,14 @@ export default function CourseTable({ onCourseClick }: CourseTableProps) {
           <Filter className="h-4 w-4" />
           {showFilters ? "إخفاء الفلترة" : "إظهار الفلترة"}
         </button>
+        <div>
+          <button
+            onClick={() => downloadCoursesExcelFile()}
+            className="bg-green-100 py-2 px-4 rounded-lg text-green-700 font-medium hover:bg-green-200 transition-colors"
+          >
+            تحميل ملف Excel
+          </button>
+        </div>
       </div>
 
       <TableFilters

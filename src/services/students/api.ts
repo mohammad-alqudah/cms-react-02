@@ -4,14 +4,33 @@ import { mockStudentDetails, mockStudentCourses } from "./mockData";
 
 const API_BASE_URL = "https://cms-app.org/";
 
-export async function getStudents(page: number = 1): Promise<StudentDetails> {
+export async function getStudents(
+  page: number = 1,
+  sort?: { field: string; direction: "asc" | "desc" | null },
+  search?: string,
+  startDate?: string,
+  endDate?: string,
+  gender?: string,
+  centerId?: string
+): Promise<StudentDetails> {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    ...(sort?.field && { sort: `${sort.field}` }),
+    ...(sort?.direction && { order: `${sort.direction}` }),
+    ...(search && { search }),
+    ...(startDate && { date: startDate }),
+    ...(endDate && { end_date: endDate }),
+    ...(gender && { gender }),
+    ...(centerId && { center: centerId }),
+  });
+
   const tokens = getStoredTokens();
   if (!tokens) {
     throw new Error("No authentication tokens found");
   }
 
   const response = await fetch(
-    `${API_BASE_URL}tajweed/dashboard/students/?page=${page}`,
+    `${API_BASE_URL}tajweed/dashboard/students/?${params.toString()}`,
     {
       headers: {
         Authorization: `Bearer ${tokens.access}`,

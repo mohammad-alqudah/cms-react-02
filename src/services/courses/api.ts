@@ -103,3 +103,25 @@ export async function finishCourse(
     tokens.access
   );
 }
+
+export async function downloadCoursesExcelFile(): Promise<any> {
+  const tokens = getStoredTokens();
+  if (!tokens) {
+    throw new Error("No authentication tokens found");
+  }
+
+  const response = await get(
+    `tajweed/dashboard/courses/?data-type=excel`,
+    tokens.access
+  );
+
+  const blob = await (response as Response).blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "students.xlsx";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.URL.revokeObjectURL(url);
+}
