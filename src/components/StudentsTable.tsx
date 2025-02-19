@@ -30,6 +30,9 @@ export default function StudentsTable() {
   const [gender, setGender] = useState("");
   const [centerId, setCenterId] = useState<any>("");
   const [centers, setCenters] = useState<any[]>([]);
+  const [educationLevel, setEducationLevel] = useState<any>();
+  const [ageFrom, setAgeFrom] = useState<any>();
+  const [ageTo, setAgeTo] = useState<any>();
 
   const [sort, setSort] = useState<{
     field: string;
@@ -81,7 +84,10 @@ export default function StudentsTable() {
           startDate,
           endDate,
           gender,
-          centerId
+          centerId,
+          educationLevel,
+          ageFrom,
+          ageTo
         );
 
         setStudents(response.data.map(mapApiStudentToModel));
@@ -99,7 +105,18 @@ export default function StudentsTable() {
     }
 
     fetchStudents();
-  }, [currentPage, sort, search, centerId, startDate, endDate, gender]);
+  }, [
+    currentPage,
+    sort,
+    search,
+    centerId,
+    startDate,
+    endDate,
+    gender,
+    educationLevel,
+    ageFrom,
+    ageTo,
+  ]);
 
   const handleStudentClick = async (studentId: string) => {
     try {
@@ -143,6 +160,7 @@ export default function StudentsTable() {
     { label: "العمر", field: "age" },
     { label: "المستوى التعليمي", field: "educationLevel" },
     { label: "رقم الهاتف", field: "mobileNumber" },
+    { label: "اسم المركز", field: "center" },
     { label: "ملاحظات", field: "notes" },
   ];
 
@@ -204,9 +222,13 @@ export default function StudentsTable() {
         centerId={centerId}
         setCenterId={setCenterId}
         centers={centers}
+        educationLevel={educationLevel}
+        setEducationLevel={setEducationLevel}
+        ageFrom={ageFrom}
+        setAgeFrom={setAgeFrom}
+        ageTo={ageTo}
+        setAgeTo={setAgeTo}
       />
-
-      {/* اسم المركز ذكر وانثي العمر */}
 
       {isLoading || isLoadingDetails ? (
         <div className="text-center py-8">جاري التحميل...</div>
@@ -215,6 +237,7 @@ export default function StudentsTable() {
           <DataTable
             columns={columns}
             data={students}
+            sort={sort}
             onSort={handleSort}
             onRowClick={handleStudentClick}
             storageKeyName="students-table-columns"

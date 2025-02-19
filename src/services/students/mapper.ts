@@ -1,5 +1,5 @@
-import { formatDate } from '../../utils/date';
-import type { ApiStudent, Student } from '../../types/student';
+import { formatDate } from "../../utils/date";
+import type { ApiStudent, Student } from "../../types/student";
 
 export function mapApiStudentToModel(apiStudent: ApiStudent): Student {
   return {
@@ -8,8 +8,9 @@ export function mapApiStudentToModel(apiStudent: ApiStudent): Student {
     gender: apiStudent.gender,
     educationLevel: apiStudent.education_level,
     mobileNumber: apiStudent.mobile_number,
+    center: apiStudent.center,
     age: apiStudent.age,
-    notes: apiStudent.notes || '',
+    notes: apiStudent.notes || "",
     createdAt: formatDate(apiStudent.created_at),
   };
 }

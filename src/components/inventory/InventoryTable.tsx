@@ -7,8 +7,10 @@ import type { InventoryItem } from "../../types/inventory";
 import { mapApiInventoryItemToModel } from "../../services/inventory/mapper";
 import Pagination from "../Pagination";
 import DataTable from "../table/DataTable";
+import { useNavigate } from "react-router-dom";
 
 export default function InventoryTable() {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [hasNext, setHasNext] = useState(false);
@@ -146,6 +148,7 @@ export default function InventoryTable() {
             sort={sort}
             onSort={handleSort}
             storageKeyName="inventoryTableColumns"
+            onRowClick={(id) => navigate(`/inventory/${id}`)}
           />
           <Pagination
             currentPage={currentPage}

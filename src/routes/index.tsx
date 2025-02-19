@@ -8,6 +8,7 @@ import StudentsPage from "../pages/StudentsPage";
 import StudentDetailsPage from "../pages/StudentDetailsPage";
 import StatisticsPage from "../pages/StatisticsPage";
 import InventoryPage from "../pages/InventoryPage";
+import InventoryItemPage from "../pages/InventoryItemPage";
 
 export default function AppRoutes() {
   const { isAuthenticated } = useAuth();
@@ -26,6 +27,7 @@ export default function AppRoutes() {
         <Route path="students/:id" element={<StudentDetailsPage />} />
         <Route path="statistics" element={<StatisticsPage />} />
         <Route path="inventory" element={<InventoryPage />} />
+        <Route path="inventory/:id" element={<InventoryItemPage />} />
       </Route>
     </Routes>
   );

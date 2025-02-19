@@ -11,7 +11,10 @@ export async function getStudents(
   startDate?: string,
   endDate?: string,
   gender?: string,
-  centerId?: string
+  centerId?: string,
+  educationLevel?: string,
+  ageFrom?: string,
+  ageTo?: string
 ): Promise<StudentDetails> {
   const params = new URLSearchParams({
     page: page.toString(),
@@ -22,6 +25,9 @@ export async function getStudents(
     ...(endDate && { end_date: endDate }),
     ...(gender && { gender }),
     ...(centerId && { center: centerId }),
+    ...(educationLevel && { education_level: educationLevel }),
+    ...(ageFrom && { age_from: ageFrom }),
+    ...(ageTo && { age_to: ageTo }),
   });
 
   const tokens = getStoredTokens();

@@ -1,4 +1,8 @@
-import { Category, Subcategory } from "../../types/inventory";
+import {
+  ApiInventoryItemDetails,
+  Category,
+  Subcategory,
+} from "../../types/inventory";
 import { get } from "../api";
 import { getStoredTokens } from "../auth";
 // import type { Category, Subcategory } from "../../types/inventory";
@@ -57,6 +61,19 @@ export async function getInventoryItems(
   let endpoint = `inventory/v2/items/?${params.toString()}`;
 
   return get(endpoint, tokens.access);
+}
+
+export async function getInventoryItem(id: string): Promise<{
+  data: { item: ApiInventoryItemDetails };
+  status: boolean;
+  error: null;
+}> {
+  const tokens = getStoredTokens();
+  if (!tokens) {
+    throw new Error("No authentication tokens found");
+  }
+
+  return get(`inventory/v2/item/${id}`, tokens.access);
 }
 
 export async function getCategories(): Promise<{
